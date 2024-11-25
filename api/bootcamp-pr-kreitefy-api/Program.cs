@@ -1,36 +1,62 @@
+using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
-namespace bootcamp_pr_kreitefy_api
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var conectioString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (builder.Environment.IsDevelopment())
 {
-    public class Program
+    builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseInMemoryDatabase(conectioString));
+}
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+static void ConfigureExceptionHandler(WebApplication app)
+{
+    app.UseExceptionHandler(errorApp =>
     {
-        public static void Main(string[] args)
+        errorApp.Run(async context =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            IExceptionHandlerPathFeature? exceptionHandlerPathFeature =
+            context.Features.Get<IExceptionHandlerPathFeature>();
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (exceptionHandlerPathFeature?.Error != null)
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                logger.LogError(exceptionHandlerPathFeature.Error, "An unhandled exception ocurred while processing the request.");
+            }
+            else
+            {
+                logger.LogError("An unhadled exception ocurred whiñe processing the request.");
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsync("An error ocurred while processing your request.");
+        });
+    });
 }
