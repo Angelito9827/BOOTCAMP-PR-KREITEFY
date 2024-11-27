@@ -12,11 +12,11 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var conectioString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseInMemoryDatabase(conectioString));
+    options.UseInMemoryDatabase(connectionString));
 }
 
 var app = builder.Build();
