@@ -45,22 +45,22 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persistence
            .IsRequired();
 
             modelBuilder.Entity<Song>()
-                .HasOne(i => i.Album)
-                .WithMany()
-                .HasForeignKey(i => i.AlbumId)
-                .IsRequired();
+           .HasOne(i => i.Album)
+           .WithMany()
+           .HasForeignKey(i => i.AlbumId)
+           .IsRequired();
 
             modelBuilder.Entity<Song>()
-                .HasOne(i => i.Artist)
-                .WithMany()
-                .HasForeignKey(i => i.ArtistId)
-                .IsRequired();
+           .HasOne(i => i.Artist)
+           .WithMany()
+           .HasForeignKey(i => i.ArtistId)
+           .IsRequired();
 
             modelBuilder.Entity<Song>()
-                .HasOne(i => i.Style)
-                .WithMany()
-                .HasForeignKey(i => i.StyleId)
-                .IsRequired();
+           .HasOne(i => i.Style)
+           .WithMany()
+           .HasForeignKey(i => i.StyleId)
+           .IsRequired();
         }
 
         public DbSet<Role> Roles { get; set; }

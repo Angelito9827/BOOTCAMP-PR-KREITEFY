@@ -35,7 +35,36 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 
         public void LoadData()
         {
-
+            if (!_applicationContext.Roles.Any())
+            {
+                LoadRoles();
+            }
+            _applicationContext.SaveChanges();
+            if (!_applicationContext.Users.Any())
+            {
+                LoadUsers();
+            }
+            _applicationContext.SaveChanges();
+            if (!_applicationContext.Styles.Any())
+            {
+                LoadStyles();
+            }
+            _applicationContext.SaveChanges();
+            if (!_applicationContext.Albums.Any())
+            {
+                LoadAlbums();
+            }
+            _applicationContext.SaveChanges();
+            if (!_applicationContext.Artists.Any())
+            {
+                LoadArtist();
+            }
+            _applicationContext.SaveChanges();
+            if (!_applicationContext.Songs.Any())
+            {
+                LoadSongs();
+            }
+            _applicationContext.SaveChanges();
         }
 
         public void LoadRoles()
@@ -45,6 +74,10 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Role { Name = "Admin" },
             new Role { Name = "User" }
             };
+            foreach (Role role in roles)
+            {
+                _applicationContext.Roles.Add(role);
+            }
         }
 
         public void LoadUsers()
@@ -72,6 +105,10 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
                 Password = "pasword04", RoleId = 2
             }
             };
+            foreach (User user in users)
+            {
+                _applicationContext.Users.Add(user);
+            }
         }
         public void LoadStyles()
         {
@@ -82,6 +119,10 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Style { Name = "Rap" },
             new Style { Name = "Indie" }
             };
+            foreach (Style style in styles)
+            {
+                _applicationContext.Styles.Add(style);
+            }
         }
 
         public void LoadAlbums()
@@ -109,6 +150,10 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Album { Name = "Copacabana", Image = copacabana },
             new Album { Name = "Animales", Image = animales },
             };
+            foreach (Album album in albums)
+            {
+                _applicationContext.Albums.Add(album);
+            }
         }
 
         public void LoadArtist()
@@ -136,6 +181,10 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Artist { Name = "Izal" },
             new Artist { Name = "Pereza" },
             };
+            foreach (Artist artist in artits)
+            {
+                _applicationContext.Artists.Add(artist);
+            }
         }
 
         public void LoadSongs()
@@ -370,8 +419,12 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
                 Name = "Todo", ArtistId = 20, AlbumId = 20,
                 StyleId = 4, Duration = new TimeSpan(0, 4, 21), AverageScore = 4.6, TotalPlayCount = 155,
                  CreatedAt = DateTime.UtcNow
-            },
+            }
             };
+            foreach (Song song in songs)
+            {
+                _applicationContext.Songs.Add(song);
+            }
         }
     }
 }

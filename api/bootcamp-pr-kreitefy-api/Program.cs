@@ -1,10 +1,18 @@
+using bootcamp_pr_kreitefy_api.Application.Mapping;
+using bootcamp_pr_kreitefy_api.Application.Services;
+using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
+using bootcamp_pr_kreitefy_api.Infrastructure.Persitence;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddAutoMapper(typeof(RoleMapperProfile));
+
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -12,14 +20,25 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "DefaultInMemoryDatabase"; ;
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseInMemoryDatabase(connectionString));
+        options.UseInMemoryDatabase(connectionString));
 }
 
 var app = builder.Build();
+
+ConfigureExceptionHandler(app);
+
+if (builder.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationContext>();
+    DataLoader dataLoader = new(context);
+    dataLoader.LoadData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
