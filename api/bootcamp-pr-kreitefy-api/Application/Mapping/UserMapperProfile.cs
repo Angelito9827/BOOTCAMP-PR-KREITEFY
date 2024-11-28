@@ -8,7 +8,8 @@ namespace bootcamp_pr_kreitefy_api.Application.Mapping
     {
         public UserMapperProfile()
         {
-            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Role.Name));
             CreateMap<UserDto, User>();
         }
     }

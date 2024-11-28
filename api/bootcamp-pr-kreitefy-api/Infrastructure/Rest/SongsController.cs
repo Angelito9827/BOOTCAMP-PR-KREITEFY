@@ -5,27 +5,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 {
-    [Route("/users")]
+    [Route("/songs")]
     [ApiController]
-    public class UsersController : GenericCrudController<UserDto>
+    public class SongsController : GenericCrudController<SongDto>
     {
-        private readonly IUserService _userService;
-        public UsersController(IUserService userService) : base(userService)
+        private readonly ISongService _songService;
+        public SongsController(ISongService songService) : base(songService)
         {
-            _userService = userService;
+            _songService = songService;
         }
+
         [NonAction]
-        public override ActionResult<IEnumerable<UserDto>> GetAll()
+        public override ActionResult<IEnumerable<SongDto>> GetAll()
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
         [Produces("application/json")]
-        public ActionResult<UserDto> GetAllUsersWithRoleName()
+        public ActionResult<SongDto> GetAllUsersWithRoleName()
         {
-            return Ok(_userService.GetAllUsers());
+            return Ok(_songService.GetAllSongs());
         }
     }
 }
-

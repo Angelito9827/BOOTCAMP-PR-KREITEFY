@@ -3,8 +3,8 @@ using bootcamp_pr_kreitefy_api.Application.Dtos;
 
 namespace bootcamp_pr_kreitefy_api.Application.Services
 {
-    public interface IUserService : IGenericService<UserDto>
+    public interface ISongService : IGenericService<SongDto>
     {
-        List<UserDto> GetAllUsers();
+        List<SongDto> GetAllSongs();
     }
 }

@@ -27,5 +27,7 @@ namespace bootcamp_pr_kreitefy_api.Application.Dtos
         public long ArtistId { get; set; }
 
         public required string ArtistName { get; set; }
+
+        public required string AlbumImage { get; set; }
     }
 }

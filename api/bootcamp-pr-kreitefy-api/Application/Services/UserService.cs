@@ -8,8 +8,15 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
 {
     public class UserService : GenericService<User, UserDto>, IUserService
     {
+        private readonly IUserRepository _userRepository;
         public UserService(IUserRepository userRepository, IMapper mapper) : base(userRepository, mapper)
         {
+            _userRepository = userRepository;
+        }
+
+        public List<UserDto> GetAllUsers()
+        {
+            return _userRepository.GetAllUsers();
         }
     }
 }

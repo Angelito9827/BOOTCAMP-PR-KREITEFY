@@ -24,7 +24,9 @@ builder.Services.AddAutoMapper(typeof(AlbumMapperProfile));
 builder.Services.AddScoped<IArtistService, ArtistService>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddAutoMapper(typeof(ArtistMapperProfile));
-
+builder.Services.AddScoped<ISongService, SongService>();
+builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.AddAutoMapper(typeof(SongMapperProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -32,7 +34,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "DefaultInMemoryDatabase"; ;
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "DefaultInMemoryDatabase";
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ApplicationContext>(options =>
