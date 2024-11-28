@@ -15,6 +15,9 @@ builder.Services.AddAutoMapper(typeof(RoleMapperProfile));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(typeof(UserMapperProfile));
+builder.Services.AddScoped<IStyleService, StyleService>();
+builder.Services.AddScoped<IStyleRepository, StyleRepository>();
+builder.Services.AddAutoMapper(typeof(StyleMapperProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
