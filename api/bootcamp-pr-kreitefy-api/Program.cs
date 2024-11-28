@@ -1,10 +1,32 @@
+using bootcamp_pr_kreitefy_api.Application.Mapping;
+using bootcamp_pr_kreitefy_api.Application.Services;
+using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
+using bootcamp_pr_kreitefy_api.Infrastructure.Persitence;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddAutoMapper(typeof(RoleMapperProfile));
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAutoMapper(typeof(UserMapperProfile));
+builder.Services.AddScoped<IStyleService, StyleService>();
+builder.Services.AddScoped<IStyleRepository, StyleRepository>();
+builder.Services.AddAutoMapper(typeof(StyleMapperProfile));
+builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
+builder.Services.AddAutoMapper(typeof(AlbumMapperProfile));
+builder.Services.AddScoped<IArtistService, ArtistService>();
+builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddAutoMapper(typeof(ArtistMapperProfile));
+builder.Services.AddScoped<ISongService, SongService>();
+builder.Services.AddScoped<ISongRepository, SongRepository>();
+builder.Services.AddAutoMapper(typeof(SongMapperProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -12,14 +34,25 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var conectioString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "DefaultInMemoryDatabase";
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseInMemoryDatabase(conectioString));
+        options.UseInMemoryDatabase(connectionString));
 }
 
 var app = builder.Build();
+
+ConfigureExceptionHandler(app);
+
+if (builder.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationContext>();
+    DataLoader dataLoader = new(context);
+    dataLoader.LoadData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
