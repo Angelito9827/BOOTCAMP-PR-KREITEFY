@@ -21,6 +21,9 @@ builder.Services.AddAutoMapper(typeof(StyleMapperProfile));
 builder.Services.AddScoped<IAlbumService, AlbumService>();
 builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
 builder.Services.AddAutoMapper(typeof(AlbumMapperProfile));
+builder.Services.AddScoped<IArtistService, ArtistService>();
+builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
+builder.Services.AddAutoMapper(typeof(ArtistMapperProfile));
 
 
 builder.Services.AddControllers();
