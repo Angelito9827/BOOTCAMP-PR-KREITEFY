@@ -18,6 +18,10 @@ builder.Services.AddAutoMapper(typeof(UserMapperProfile));
 builder.Services.AddScoped<IStyleService, StyleService>();
 builder.Services.AddScoped<IStyleRepository, StyleRepository>();
 builder.Services.AddAutoMapper(typeof(StyleMapperProfile));
+builder.Services.AddScoped<IAlbumService, AlbumService>();
+builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
+builder.Services.AddAutoMapper(typeof(AlbumMapperProfile));
+
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
