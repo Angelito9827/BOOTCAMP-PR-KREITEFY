@@ -1,0 +1,30 @@
+.navbar {
+    background-color: rgb(34, 34, 34);
+    height: 100px;
+  
+    .container-fluid {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  
+        .logotipo, img {
+          width: 40px;
+          height: auto;
+        }
+
+        .navbar-brand h3 {
+          color: white;
+          cursor: pointer; 
+        }
+  
+        .btn {
+          color:white;
+          border-color: white;
+
+          &:hover {
+            background-color: darkgrey;
+          }
+        }
+      }
+  }
+  
