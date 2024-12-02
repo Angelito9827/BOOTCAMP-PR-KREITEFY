@@ -18,5 +18,12 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
         {
             return _userRepository.GetAllUsers();
         }
+
+        public UserDto RegisterUser(UserDto userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            var newUser = _repository.Insert(user);
+            return _mapper.Map<UserDto>(newUser);
+        }
     }
 }
