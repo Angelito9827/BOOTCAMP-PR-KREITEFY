@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { UserDto } from '../model/user.model';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../service/user.service';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +14,7 @@ export class RegisterComponent {
   errorMessage: string | null = null;
 
   constructor(
-    private userService: UserService,
+    private userService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder
   ) {this.buildForm()}
@@ -42,7 +42,7 @@ export class RegisterComponent {
   }
 
   insertUser(userToSave: UserDto): void {
-    this.userService.insertUser(userToSave).subscribe({
+    this.userService.register(userToSave).subscribe({
       next: (userInserted) => {
         console.log("Created successfully");
         console.log(userInserted);
@@ -115,6 +115,10 @@ export class RegisterComponent {
 
   public handleError(error: any): void {
     console.log(error);
-    this.errorMessage = "An unexpected error occurred. Please try again.";
+    if (error.status === 400) {
+      this.errorMessage = "This email is alredy in use"
+    } else {
+      this.errorMessage = "An unexpected error occurred. Please try again.";
+    }
   }
 }

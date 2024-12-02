@@ -7,6 +7,15 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontEnd", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 // Add services to the container.
 builder.Services.AddScoped<IRoleService, RoleService>();
@@ -44,6 +53,8 @@ if (builder.Environment.IsDevelopment())
 var app = builder.Build();
 
 ConfigureExceptionHandler(app);
+
+app.UseCors("AllowFrontEnd");
 
 if (builder.Environment.IsDevelopment())
 {
