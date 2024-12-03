@@ -36,6 +36,8 @@ builder.Services.AddAutoMapper(typeof(ArtistMapperProfile));
 builder.Services.AddScoped<ISongService, SongService>();
 builder.Services.AddScoped<ISongRepository, SongRepository>();
 builder.Services.AddAutoMapper(typeof(SongMapperProfile));
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);

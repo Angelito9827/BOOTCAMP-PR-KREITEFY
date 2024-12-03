@@ -1,10 +1,7 @@
 ﻿using bootcamp_pr_kreitefy_api.Application.Dtos;
 using bootcamp_pr_kreitefy_api.Application.Services;
+using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 {
@@ -13,20 +10,18 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ITokenService _token;
 
-        public AuthController(IUserService userService)
+        public AuthController(IUserService userService, ITokenService token)
         {
             _userService = userService;
+            _token = token;
         }
 
         [HttpPost("register")]
         [Produces("application/json")]
         public ActionResult Register([FromBody] UserDto userDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             try
             {
@@ -35,19 +30,13 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
                 {
                     return BadRequest("This email is alredy in use.");
                 }
-
-                // Registra al nuevo usuario
                 var newUser = _userService.RegisterUser(userDto);
+                var token = _token.GenerateJwtToken(newUser);
 
-                // Genera el token para el usuario registrado
-                var token = GenerateJwtToken(newUser);
-
-                // Devuelve el usuario, el token y el nombre
                 return Ok(new
                 {
                     User = newUser,
-                    Token = token,
-                    UserName = newUser.Name
+                    Token = token
                 });
             }
             catch (Exception ex)
@@ -56,27 +45,21 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
             }
         }
 
-        private string GenerateJwtToken(UserDto user)
+        [HttpPost("login")]
+        [Produces("application/json")]
+        public ActionResult<LoginDto> Login([FromBody] LoginDto loginDto)
         {
-            var claims = new[]
+            var user = _userService.GetAllUsers()
+                .FirstOrDefault(u => u.Email.Equals(loginDto.Email, StringComparison.OrdinalIgnoreCase));
+
+            if (user == null || user.Password != loginDto.Password)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Name, user.Name),
-            };
+                return Unauthorized("Invalid email or password.");
+            }
 
-            var key = new SymmetricSecurityKey(RandomNumberGenerator.GetBytes(32));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = _token.GenerateJwtToken(user);
 
-            var token = new JwtSecurityToken(
-                issuer: "your_issuer",
-                audience: "your_audience",
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { Token = token });
         }
 
     }

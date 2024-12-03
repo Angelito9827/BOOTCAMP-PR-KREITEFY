@@ -1,3 +1,7 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!isLoggedIn; else loggedIn">
     <img class="back" src="../fondo.png">
 </div>
+
+<ng-template #loggedIn>
+    <p>Hola estas logeado</p>
+</ng-template>

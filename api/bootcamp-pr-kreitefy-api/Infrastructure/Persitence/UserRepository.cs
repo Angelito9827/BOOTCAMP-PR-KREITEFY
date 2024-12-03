@@ -43,6 +43,23 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             return user;
         }
 
+        public User? GetUserByEmail(string email)
+        {
+            return _applicationContext.Users
+          .Where(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
+          .Select(u => new User
+          {
+              Id = u.Id,
+              Name = u.Name,
+              LastName = u.LastName,
+              Email = u.Email,
+              Password = u.Password,
+              RoleId = u.RoleId,
+          })
+          .FirstOrDefault();
+
+        }
+
         public override User Insert(User user)
         {
             _applicationContext.Users.Add(user);

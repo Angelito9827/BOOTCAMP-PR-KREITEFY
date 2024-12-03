@@ -7,5 +7,6 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
     {
         List<UserDto> GetAllUsers();
         UserDto RegisterUser(UserDto userDto);
+        UserDto GetUserByEmail(string email);
     }
 }

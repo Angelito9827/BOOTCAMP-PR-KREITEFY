@@ -19,6 +19,12 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             return _userRepository.GetAllUsers();
         }
 
+        public UserDto GetUserByEmail(string email)
+        {
+            var user = _userRepository.GetUserByEmail(email);
+            return _mapper.Map<UserDto>(user);
+        }
+
         public UserDto RegisterUser(UserDto userDto)
         {
             var user = _mapper.Map<User>(userDto);

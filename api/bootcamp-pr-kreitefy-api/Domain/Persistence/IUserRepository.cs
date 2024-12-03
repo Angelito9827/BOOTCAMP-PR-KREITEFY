@@ -7,5 +7,6 @@ namespace bootcamp_pr_kreitefy_api.Domain.Persistence
     public interface IUserRepository : IGenericRepository<User>
     {
         List<UserDto> GetAllUsers();
+        User? GetUserByEmail(string email);
     }
 }
