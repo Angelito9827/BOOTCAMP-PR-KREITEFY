@@ -14,6 +14,12 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             _songRepository = songRepository;
         }
 
+        public IEnumerable<RecentSongDto> GetRecentSongs(int count = 5)
+        {
+            var songs = _songRepository.GetRecentSongs(count);
+            return songs;
+        }
+
         public List<SongDto> GetAllSongs()
         {
             return _songRepository.GetAllSongs();

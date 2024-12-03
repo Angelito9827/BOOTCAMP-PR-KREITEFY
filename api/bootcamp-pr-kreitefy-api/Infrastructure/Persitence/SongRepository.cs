@@ -52,6 +52,22 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 
             return song;
         }
+
+        public IEnumerable<RecentSongDto> GetRecentSongs(int count = 5)
+        {
+            var songs = _applicationContext.Songs
+                .OrderByDescending(song => song.CreatedAt)
+                .Take(count)
+                .Select(i => new RecentSongDto()
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    ArtistName = i.Artist.Name,
+                    AlbumImage = Convert.ToBase64String(i.Album.Image),
+                });
+            return songs;
+        }
+
         public override Song Insert(Song song)
         {
             _applicationContext.Songs.Add(song);

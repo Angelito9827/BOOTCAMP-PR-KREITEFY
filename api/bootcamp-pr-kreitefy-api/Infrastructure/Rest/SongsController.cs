@@ -27,5 +27,20 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
         {
             return Ok(_songService.GetAllSongs());
         }
+
+        [HttpGet("/songs/recent-songs")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<RecentSongDto>> GetRecentSongs([FromQuery] int count = 5)
+        {
+            try
+            {
+                var songs = _songService.GetRecentSongs(count);
+                return Ok(songs);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
