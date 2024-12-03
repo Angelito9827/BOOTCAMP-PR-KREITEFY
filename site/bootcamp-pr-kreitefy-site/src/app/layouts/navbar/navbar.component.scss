@@ -16,13 +16,20 @@
           color: white;
           cursor: pointer; 
         }
-  
-        .btn {
-          color:white;
-          border-color: white;
 
-          &:hover {
-            background-color: darkgrey;
+        .auth {
+          
+          .btn {
+            color:white;
+            border-color: white;
+            
+            &:hover {
+              background-color: darkgrey;
+            }
+          }
+
+          .user-name {
+            color: white;
           }
         }
       }

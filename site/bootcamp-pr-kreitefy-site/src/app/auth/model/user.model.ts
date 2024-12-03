@@ -6,4 +6,5 @@ export interface UserDto {
     password: string;
     roleId: number;
     roleName: string;
+    token: string;
 }

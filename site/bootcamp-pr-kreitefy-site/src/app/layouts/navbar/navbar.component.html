@@ -6,8 +6,11 @@
         <div class="navbar-brand">
           <h3 [routerLink]="['']">Kreitefy</h3>
         </div>
-        <button type="button" class="btn">
-          Login
-        </button>
+        <div class="auth">
+          <span *ngIf="isLoggedIn" class="user-name me-3">Welcome, {{ userName }}</span>
+          <button type="button" class="btn" (click)="handleLoginLogout()">
+            {{ isLoggedIn ? 'Logout' : 'Login' }}
+          </button>
+        </div>
       </div>
   </nav>

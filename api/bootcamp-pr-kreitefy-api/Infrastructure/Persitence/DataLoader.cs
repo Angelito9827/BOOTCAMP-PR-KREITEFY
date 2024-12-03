@@ -87,7 +87,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new User
             {
                 Name = "Alicia", LastName = "Fernández", Email = "alice@example.com",
-                Password = "pasword01", RoleId = 1
+                Password = "Pasword-01", RoleId = 1
             },
             new User
             {
