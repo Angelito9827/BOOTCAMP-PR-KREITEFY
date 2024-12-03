@@ -7,5 +7,6 @@ namespace bootcamp_pr_kreitefy_api.Domain.Persistence
     public interface ISongRepository : IGenericRepository<Song>
     {
         List<SongDto> GetAllSongs();
+        IEnumerable<RecentSongDto> GetRecentSongs(int count = 5);
     }
 }

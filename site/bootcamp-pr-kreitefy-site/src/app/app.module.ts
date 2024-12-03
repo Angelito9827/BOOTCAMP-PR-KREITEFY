@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +9,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { LoginComponent } from './auth/login/login.component';
+import { RecentSongsCardComponent } from './songs/components/recent-songs/recent-songs-card/recent-songs-card.component';
 
 
 @NgModule({
@@ -24,9 +25,11 @@ import { LoginComponent } from './auth/login/login.component';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RecentSongsCardComponent
   ],
   providers: [
+    provideClientHydration(),
     provideHttpClient(withFetch())
   ],
   bootstrap: [AppComponent]
