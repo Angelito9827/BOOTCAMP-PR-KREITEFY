@@ -8,7 +8,7 @@
                 <div *ngIf="form.get('email')!.touched && form.get('email')!.errors" class="text-danger">
                     <small *ngIf="form.get('email')!.errors!['required']">This field is required.</small>
                     <small *ngIf="form.get('email')!.errors!['email']">Please, insert a valid email.</small>
-                  </div>
+                </div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -20,18 +20,18 @@
                     <small *ngIf="form.get('password')!.errors!['uppercase']">Password must contain at least one uppercase letter.</small>
                     <small *ngIf="form.get('password')!.errors!['lowercase']">Password must contain at least one lowercase letter.</small>
                     <small *ngIf="form.get('password')!.errors!['number']">Password must contain at least one number.</small>
-                  </div>
+                </div>
             </div>
             <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
                 {{ errorMessage }}
             </div>
             <div class="buttons">
-                <button class="btn send" (click)="loginUser()">Log in</button>
-                <button class="btn back"(click)="goBack()">Cancel</button>
+                <button class="btn send" (click)="loginUser()">Login</button>
+                <button class="btn back" (click)="goBack()">Cancel</button>
             </div>
             <div class="text-center register">
-                <p>¿No tienes cuenta?
-                    <a [routerLink]="['/register']" class="register-link">Regístrate aquí</a>.
+                <p>Don't have an account?
+                    <a [routerLink]="['/register']" class="register-link">Sign up here</a>.
                 </p>
             </div>
         </form>

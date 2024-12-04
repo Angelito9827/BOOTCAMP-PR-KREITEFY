@@ -12,7 +12,7 @@ export class HomeComponent {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.getLoggedInStatus().subscribe(status => {
+    this.authService.getAuthStatus().subscribe(status => {
       this.isLoggedIn = status;
     });
   }

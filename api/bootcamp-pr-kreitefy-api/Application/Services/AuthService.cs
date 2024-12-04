@@ -1,4 +1,5 @@
 ﻿using bootcamp_pr_kreitefy_api.Application.Dtos;
+using bootcamp_pr_kreitefy_api.Application.Validators;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 
 namespace bootcamp_pr_kreitefy_api.Application.Services
@@ -8,11 +9,13 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
 
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
+        private readonly IRoleRepository _roleRepository;
 
-        public AuthService(IUserService userService, ITokenService tokenService)
+        public AuthService(IUserService userService, ITokenService tokenService, IRoleRepository roleRepository)
         {
             _userService = userService;
             _tokenService = tokenService;
+            _roleRepository = roleRepository;
         }
 
         public AuthDto Login(LoginDto loginDto)
@@ -31,21 +34,38 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             };
         }
 
-        public AuthDto Register(UserDto userDto)
+        public void Register(UserRegisterDto request)
         {
-            var existingUser = _userService.GetUserByEmail(userDto.Email);
+            if (!EmailValidator.IsValidEmail(request.Email))
+            {
+                throw new ArgumentException("Invalid email format.");
+            }
+
+            var existingUser = _userService.GetUserByEmail(request.Email);
             if (existingUser != null)
             {
                 throw new Exception("Email is already in use.");
             }
 
-            var newUser = _userService.RegisterUser(userDto);
-            var token = _tokenService.GenerateJwtToken(newUser);
-
-            return new AuthDto
+            var passwordErrors = PasswordValidator.ValidatePassword(request.Password).ToList();
+            if (passwordErrors.Any())
             {
-                Token = token
+                throw new ArgumentException(string.Join(", ", passwordErrors));
+            }
+
+            var role = _roleRepository.GetById(request.RoleId);
+
+            var userDto = new UserDto()
+            {
+                Email = request.Email,
+                LastName = request.LastName,
+                Name = request.Name,
+                Password = request.Password,
+                RoleId = request.RoleId,
+                RoleName = role.Name,
             };
+
+            var newUser = _userService.RegisterUser(userDto);
         }
     }
 }
