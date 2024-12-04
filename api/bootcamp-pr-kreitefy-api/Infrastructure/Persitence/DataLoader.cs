@@ -87,22 +87,22 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new User
             {
                 Name = "Alicia", LastName = "Fernández", Email = "alice@example.com",
-                Password = "Pasword-01", RoleId = 1
+                Password = "Password-01", RoleId = 1
             },
             new User
             {
                 Name = "Ricardo", LastName = "Rodríguez", Email = "ricardo@example.com",
-                Password = "pasword02", RoleId = 2
+                Password = "password02", RoleId = 2
             },
             new User
             {
                 Name = "Mario", LastName = "Martínez", Email = "mario@example.com",
-                Password = "pasword03", RoleId = 1
+                Password = "password03", RoleId = 1
             },
             new User
             {
                 Name = "Carlos", LastName = "Ramírez", Email = "carlos@example.com",
-                Password = "pasword04", RoleId = 2
+                Password = "password04", RoleId = 2
             }
             };
             foreach (User user in users)

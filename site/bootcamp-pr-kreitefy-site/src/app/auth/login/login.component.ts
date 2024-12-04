@@ -33,32 +33,15 @@ export class LoginComponent {
   )
   }
 
-  private initializeUser(): {email:string; password:string}{
-    const{email, password} = this.form?.value;
-    return {  
-      email,   
-      password,
-    };
-  }
-
-  insertSesion(credentials: {email:string; password:string}): void {
-    this.authService.login(credentials).subscribe({
-      next:(response) => {
-        const token = response.token;
-        this.authService.saveToken(token);
-        this.router.navigate(['/']);
-      },
-      error:(err) => {this.handleError(err)}
-    })
-  }
-
-  public loginUser(): void {
+  loginUser(): void {
     this.markFormAsTouched();
     if (this.form.valid) {
-      const credentials = this.initializeUser();
-      this.insertSesion(credentials);
+      this.authService.login(this.form.value).subscribe({
+        next: () => this.router.navigate(['/']),
+        error: (err) => this.handleError(err)
+      });
     } else {
-      console.error("Invalid form")
+      console.error('Invalid form');
     }
   }
 
@@ -71,9 +54,13 @@ export class LoginComponent {
   }
 
   private handleError(error: any): void {
-    console.error(error);
-    this.errorMessage = error.status === 401
-    ? "Incorrect credentials. Please verify your email and password."
-    : "An unexpected error occurred. Please try again.";    
+    
+    if (error.status === 401) {
+      console.error("Invalid email or password.");
+      this.errorMessage = 'Invalid email or password. Please try again.';
+    } else {
+      console.error("Unexpected error.");
+      this.errorMessage = 'Unexpected error. Please try later.';
+    }
   }
 }

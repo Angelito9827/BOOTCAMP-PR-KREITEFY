@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { UserDto } from '../model/user.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth/auth.service';
 import { CustomValidators } from '../Validators/custom-validators';
+import { UserRegister } from '../model/user-register.model';
 
 @Component({
   selector: 'app-register',
@@ -18,45 +18,11 @@ export class RegisterComponent {
     private authService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder
-  ) {this.buildForm()}
-
-  private initializeUser(): UserDto{
-    const{name, lastName, email, password} = this.form?.value;
-    return {
-      id: undefined,       
-      name,   
-      lastName, 
-      email,   
-      password,
-      roleId: 2,
-      roleName: '',
-      token: ''
-    };
+  ) {
+    this.buildForm();
   }
 
-  public saveUser(): void {
-    this.markFormAsTouched();
-    if (this.form.valid) {
-      this.insertUser(this.initializeUser())
-    } else {
-      console.error("invalid form.")
-    }
-  }
-
-  insertUser(userToSave: UserDto): void {
-    this.authService.register(userToSave).subscribe({
-      next: (userInserted) => {
-        this.authService.saveToken(userInserted.token);
-        localStorage.setItem('userName', userInserted.name);
-        console.log("Created successfully");
-        console.log(userInserted);
-        this.router.navigate(['/']);
-      },
-      error: (err) => {this.handleError(err);}
-    })
-  }
-
-  public buildForm(): void {
+  private buildForm(): void {
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
@@ -68,25 +34,47 @@ export class RegisterComponent {
       ]],
       password: ['', [Validators.required, CustomValidators.passwordValidator()]],
       rePassword: ['', [Validators.required]],
-    },
-    { validators: CustomValidators.passwordsMatchValidator('password', 'rePassword') }
-  )
+    }, {
+      validators: CustomValidators.passwordsMatchValidator('password', 'rePassword')
+    });
+  }
+
+  registerUser(): void {
+    this.markFormAsTouched();
+    if (this.form.valid) {
+      const request : UserRegister = {
+        email : this.form.controls?.['email'].value,
+        lastName : this.form.controls?.['lastName'].value,
+        name : this.form.controls?.['name'].value,
+        password : this.form.controls?.['password'].value,
+        roleId : 2
+      }
+
+      this.authService.register(request).subscribe({
+        next: () => this.router.navigate(['/']),
+        error: (err) => this.handleError(err)
+      });
+    } else {
+      console.error('Invalid form');
+    }
   }
 
   goBack(): void {
-    this.router.navigate(['/'])
+    this.router.navigate(['/']);
   }
 
   private markFormAsTouched(): void {
     Object.values(this.form.controls).forEach(control => control.markAsTouched());
   }
 
-  public handleError(error: any): void {
-    console.log(error);
+  private handleError(error: any): void {
+    
     if (error.status === 400) {
-      this.errorMessage = "This email is alredy in use"
+      console.error("This email is already in use.");
+      this.errorMessage = 'This email is already in use. Please introduce a diferent email.';
     } else {
-      this.errorMessage = "An unexpected error occurred. Please try again.";
+      console.error("Unexpected error.");
+      this.errorMessage = 'Unexpected error. Please try later.';
     }
   }
 }

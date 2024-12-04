@@ -4,7 +4,7 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
 {
     public interface IAuthService
     {
-        AuthDto Register(UserDto userDto);
+        void Register(UserRegisterDto userDto);
 
         AuthDto Login(LoginDto loginDto);
     }

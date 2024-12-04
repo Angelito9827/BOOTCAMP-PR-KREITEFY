@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../auth/service/auth/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -10,18 +11,30 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   isLoggedIn: boolean = false;
   userName: string = '';
+  private loginStatusSubscription!: Subscription;
+  private userNameSubscription!: Subscription;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.authService.getLoggedInStatus().subscribe(status => {
+    this.loginStatusSubscription = this.authService.getAuthStatus().subscribe(status => {
       this.isLoggedIn = status;
     });
 
-    this.authService.getUserNameObservable().subscribe(name => {
+    this.userNameSubscription = this.authService.getUserNameObservable().subscribe(name => {
       this.userName = name;
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.loginStatusSubscription) {
+      this.loginStatusSubscription.unsubscribe();
+    }
+    if (this.userNameSubscription) {
+      this.userNameSubscription.unsubscribe();
+    }
+  }
+  
 
   logout(): void {
     this.authService.logout();

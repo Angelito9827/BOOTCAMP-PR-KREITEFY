@@ -1,6 +1,7 @@
 using bootcamp_pr_kreitefy_api.Application.Mapping;
 using bootcamp_pr_kreitefy_api.Application.Services;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
+using bootcamp_pr_kreitefy_api.Infrastructure.ExternalServices;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persitence;
 using Microsoft.AspNetCore.Diagnostics;

@@ -34,7 +34,12 @@ export class CustomValidators {
       const password = group.get(passwordField)?.value;
       const rePassword = group.get(confirmPasswordField)?.value;
 
-      return password === rePassword ? null : { passwordsMismatch: true };
+      if (password !== rePassword) {
+        console.error('Passwords do not match');
+        return { passwordsMismatch: true };
+      }
+
+      return null;
     };
   }
 }
