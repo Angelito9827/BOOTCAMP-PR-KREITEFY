@@ -39,6 +39,12 @@ builder.Services.AddScoped<ISongRepository, SongRepository>();
 builder.Services.AddAutoMapper(typeof(SongMapperProfile));
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IHistoryService, HistoryService>();
+builder.Services.AddScoped<IHistoryRepository, HistoryRepository>();
+builder.Services.AddAutoMapper(typeof(HistoryMapperProfile));
+builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
+builder.Services.AddScoped<IScoreService, ScoreService>();
+builder.Services.AddAutoMapper(typeof(ScoreMapperProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
