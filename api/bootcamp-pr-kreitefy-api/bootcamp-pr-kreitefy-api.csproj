@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\Persitence\NewFolder\**" />
+    <Content Remove="Infrastructure\Persitence\NewFolder\**" />
+    <EmbeddedResource Remove="Infrastructure\Persitence\NewFolder\**" />
+    <None Remove="Infrastructure\Persitence\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />

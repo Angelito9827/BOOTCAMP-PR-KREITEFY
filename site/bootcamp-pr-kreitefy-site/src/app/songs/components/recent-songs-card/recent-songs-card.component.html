@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <h1>Recent Songs</h1>
+    <div class="songs">
+        <div class="card">
+            <div class="card-body" *ngFor="let song of recentSongs" (click)="navigateToProductDetails(song.id)">
+                <div class="song-image">
+                    <img [src]="'data:image/png;base64,' + song.albumImage" alt="">
+                </div>
+                <div class="card-text">{{song.name}}
+                    <div class="song-info">
+                        <span class="name">Song&nbsp;&nbsp;· &nbsp;&nbsp;</span>
+                        <span class="artist">{{song.artistName}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

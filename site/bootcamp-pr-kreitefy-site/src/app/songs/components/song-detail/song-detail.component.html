@@ -1,0 +1,33 @@
+<div class="container-fluid" *ngIf="song">
+    <div class="card">
+        <div class="song-header">
+            <div class="song-image">
+                <img [src]="'data:image/png;base64,' + song.albumImage" alt="">
+            </div>
+            <div class="song-info">
+                <h2 class="song-name">{{song.name}}</h2>
+                <h4 class="song-artist">{{song.albumName}}&nbsp; · &nbsp;<span class="song-album">{{song.artistName}}</span></h4>
+                <div class="score">
+                    <div class="stars-buttons"> 
+                        <button class="btn star"  (click)="averageScore(1)"><i [ngClass]="(song.averageScore || 0) >= 1 ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i></button>
+                        <button class="btn star"  (click)="averageScore(2)"><i [ngClass]="(song.averageScore || 0) >= 2 ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i></button>
+                        <button class="btn star"  (click)="averageScore(3)"><i [ngClass]="(song.averageScore || 0) >= 3 ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i></button>
+                        <button class="btn star"  (click)="averageScore(4)"><i [ngClass]="(song.averageScore || 0) >= 4 ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i></button>
+                        <button class="btn star"  (click)="averageScore(5)"><i [ngClass]="(song.averageScore || 0) >= 5 ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i></button>
+                    </div>
+                    <p class="average">{{song.averageScore | number:'1.1-2' }}/5</p>
+                    <p class="play-count"><strong>Reproductions: </strong>{{song.totalPlayCount}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="song-body">
+            <div class="actions-buttons">
+                <div class="reproduction">
+                    <button class="btn play"><i class="fa-solid fa-backward"></i></button>
+                    <button class="btn play" (click)="incrementTotalPlayCount()"><i class="fa-solid fa-play"></i></button>
+                    <button class="btn play"><i class="fa-solid fa-forward "></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

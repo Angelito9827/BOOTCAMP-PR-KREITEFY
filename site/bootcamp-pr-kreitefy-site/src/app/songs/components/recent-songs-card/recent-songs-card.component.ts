@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RecentSongDto } from '../../../model/recent-song.model';
-import { SongService } from '../../../services/song.service';
-import { response } from 'express';
+import { Router } from '@angular/router';
+import { RecentSongDto } from '../../model/recent-song.model';
+import { SongService } from '../../services/song.service';
 
 @Component({
   selector: 'app-recent-songs-card',
@@ -16,7 +16,8 @@ export class RecentSongsCardComponent {
   recentSongs: RecentSongDto[] = [];
 
   constructor(
-    private songService: SongService
+    private songService: SongService,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
@@ -31,5 +32,9 @@ export class RecentSongsCardComponent {
           console.error("Error getting recent songs")
         }
     }) 
+  }
+
+  navigateToProductDetails(songId: number) {
+    this.router.navigate(["/songs/",songId])
   }
 }

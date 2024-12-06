@@ -5,11 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
-import { LoginComponent } from './auth/login/login.component';
-import { RecentSongsCardComponent } from './songs/components/recent-songs/recent-songs-card/recent-songs-card.component';
+import { LoginComponent } from './auth/components/login/login.component';
+import { RegisterComponent } from './auth/components/register/register.component';
+import { RecentSongsCardComponent } from './songs/components/recent-songs-card/recent-songs-card.component';
 
 
 @NgModule({

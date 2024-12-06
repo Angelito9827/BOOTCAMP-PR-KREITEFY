@@ -12,18 +12,18 @@ namespace bootcamp_pr_kreitefy_api.Domain.Entities
         public required DateTime PlayedAt { get; set; }
 
         [Required]
-        public required int PlayCountById { get; set; }
+        public required int MyPlayCount { get; set; }
 
         [Required]
         public required long UserId { get; set; }
 
         [Required]
-        public required User User { get; set; }
+        public User User { get; set; }
 
         [Required]
         public required long SongId { get; set; }
 
         [Required]
-        public required Song Song { get; set; }
+        public Song Song { get; set; }
     }
 }
