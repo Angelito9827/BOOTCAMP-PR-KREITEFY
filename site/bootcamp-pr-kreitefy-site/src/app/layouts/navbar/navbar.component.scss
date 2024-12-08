@@ -1,37 +1,46 @@
 .navbar {
-    background-color: rgb(27, 27, 27);
-    height: 100px;
-  
-    .container-fluid {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-  
-        .logotipo, img {
-          width: 40px;
-          height: auto;
-        }
+  background-color: rgb(27, 27, 27);
+  height: 100px;
 
-        .navbar-brand h3 {
-          color: white;
-          cursor: pointer; 
-        }
+  .container-fluid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
-        .auth {
-          
-          .btn {
-            color:white;
-            border-color: white;
-            
-            &:hover {
-              background-color: darkgrey;
-            }
-          }
+    .logotipo, img {
+      width: 40px;
+      height: auto;
+    }
 
-          .user-name {
-            color: white;
-          }
-        }
+    .navbar-brand h3 {
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn {
+      color: white;
+      border-color: white;
+
+      &:hover {
+        background-color: darkgray;
       }
+
+      .user-name {
+        color: white;
+      }
+    }
+
+    .dropdown-menu {
+      background-color: darkgray;
+      width: auto !important;  
+      min-width: 0;
+      padding: 0;
+      box-sizing: border-box;
+
+      .dropdown-item:hover {
+        background-color: rgb(48, 48, 48);
+        color: white;
+      }
+    }
   }
-  
+}
