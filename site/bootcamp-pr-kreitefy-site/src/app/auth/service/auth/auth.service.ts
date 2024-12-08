@@ -84,7 +84,7 @@ export class AuthService {
     }
   }
 
-  private hasToken(): boolean {
+  hasToken(): boolean {
     return this.isBrowser() && !!localStorage.getItem(this.tokenKey);
   }
 
@@ -94,6 +94,10 @@ export class AuthService {
 
   getStoredUserId(): string {
     return this.isBrowser() ? localStorage.getItem(this.userId) || '' : '';
+  }
+
+  getStoredToken(): string | null {
+    return this.isBrowser() ? localStorage.getItem(this.tokenKey) : null;
   }
 
   private isBrowser(): boolean {

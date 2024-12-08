@@ -7,6 +7,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 {
     [Route("/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -20,6 +21,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 
         [HttpPost("register")]
         [Produces("application/json")]
+        [AllowAnonymous]
         public ActionResult Register([FromBody] UserRegisterDto request)
         {
             try
