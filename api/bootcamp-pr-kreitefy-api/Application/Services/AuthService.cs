@@ -20,6 +20,12 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
 
         public AuthDto Login(LoginDto loginDto)
         {
+
+            if (!EmailValidator.IsValidEmail(loginDto.Email))
+            {
+                throw new ArgumentException("Invalid email format.");
+            }
+
             var user = _userService.GetUserByEmail(loginDto.Email);
             if (user == null || user.Password != loginDto.Password)
             {

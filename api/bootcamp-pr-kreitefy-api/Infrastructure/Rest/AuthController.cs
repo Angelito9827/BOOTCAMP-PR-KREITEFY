@@ -49,6 +49,10 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
             {
                 return Unauthorized("Invalid email or password.");
             }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
