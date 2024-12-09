@@ -95,6 +95,7 @@ builder.Services.AddAutoMapper(typeof(HistoryMapperProfile));
 builder.Services.AddScoped<IScoreRepository, ScoreRepository>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
 builder.Services.AddAutoMapper(typeof(ScoreMapperProfile));
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddControllers();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);

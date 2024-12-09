@@ -10,12 +10,14 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
         private readonly IRoleRepository _roleRepository;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public AuthService(IUserService userService, ITokenService tokenService, IRoleRepository roleRepository)
+        public AuthService(IUserService userService, ITokenService tokenService, IRoleRepository roleRepository, IPasswordHasher passwordHasher)
         {
             _userService = userService;
             _tokenService = tokenService;
             _roleRepository = roleRepository;
+            _passwordHasher = passwordHasher;
         }
 
         public AuthDto Login(LoginDto loginDto)
@@ -25,9 +27,13 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             {
                 throw new ArgumentException("Invalid email format.");
             }
-
             var user = _userService.GetUserByEmail(loginDto.Email);
-            if (user == null || user.Password != loginDto.Password)
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("Invalid email or password.");
+            }
+
+            if (!_passwordHasher.VerifyPassword(user.Password, loginDto.Password))
             {
                 throw new UnauthorizedAccessException("Invalid email or password.");
             }
@@ -40,7 +46,7 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             };
         }
 
-        public void Register(UserRegisterDto request)
+        public AuthDto Register(UserRegisterDto request)
         {
             if (!EmailValidator.IsValidEmail(request.Email))
             {
@@ -59,6 +65,8 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
                 throw new ArgumentException(string.Join(", ", passwordErrors));
             }
 
+            var hashedPassword = _passwordHasher.HashPassword(request.Password);
+
             var role = _roleRepository.GetById(request.RoleId);
 
             var userDto = new UserDto()
@@ -66,12 +74,17 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
                 Email = request.Email,
                 LastName = request.LastName,
                 Name = request.Name,
-                Password = request.Password,
+                Password = hashedPassword,
                 RoleId = request.RoleId,
                 RoleName = role.Name,
             };
 
             var newUser = _userService.RegisterUser(userDto);
+            var token = _tokenService.GenerateJwtToken(newUser);
+            return new AuthDto
+            {
+                Token = token
+            };
         }
     }
 }

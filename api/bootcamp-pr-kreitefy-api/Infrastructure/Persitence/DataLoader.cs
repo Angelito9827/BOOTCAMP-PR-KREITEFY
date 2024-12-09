@@ -1,4 +1,5 @@
 ﻿using bootcamp_pr_kreitefy_api.Domain.Entities;
+using bootcamp_pr_kreitefy_api.Infrastructure.ExternalServices;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
 
 namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
@@ -82,34 +83,43 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 
         public void LoadUsers()
         {
+            var passwordHasher = new PasswordHasher();
+
             var users = new User[]
             {
-            new User
-            {
-                Name = "Alicia", LastName = "Fernández", Email = "alice@example.com",
-                Password = "Password-01", RoleId = 1
-            },
-            new User
-            {
-                Name = "Ricardo", LastName = "Rodríguez", Email = "ricardo@example.com",
-                Password = "Password-02", RoleId = 2
-            },
-            new User
-            {
-                Name = "Mario", LastName = "Martínez", Email = "mario@example.com",
-                Password = "Password-03", RoleId = 1
-            },
-            new User
-            {
-                Name = "Carlos", LastName = "Ramírez", Email = "carlos@example.com",
-                Password = "Password-04", RoleId = 2
-            }
+        new User
+        {
+            Name = "Alicia", LastName = "Fernández", Email = "alice@example.com",
+            Password = passwordHasher.HashPassword("Password-01"), RoleId = 1
+        },
+        new User
+        {
+            Name = "Ricardo", LastName = "Rodríguez", Email = "ricardo@example.com",
+            Password = passwordHasher.HashPassword("Password-02"), RoleId = 2
+        },
+        new User
+        {
+            Name = "Mario", LastName = "Martínez", Email = "mario@example.com",
+            Password = passwordHasher.HashPassword("Password-03"), RoleId = 1
+        },
+        new User
+        {
+            Name = "Carlos", LastName = "Ramírez", Email = "carlos@example.com",
+            Password = passwordHasher.HashPassword("Password-04"), RoleId = 2
+        }
             };
+
             foreach (User user in users)
             {
                 _applicationContext.Users.Add(user);
             }
+
+            _applicationContext.Users.AddRange(users);
+            _applicationContext.SaveChanges();
+
+            Console.WriteLine("Users loaded:");
         }
+
         public void LoadStyles()
         {
             var styles = new Style[]

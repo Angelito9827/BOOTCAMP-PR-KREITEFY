@@ -22,12 +22,12 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
         [HttpPost("register")]
         [Produces("application/json")]
         [AllowAnonymous]
-        public ActionResult Register([FromBody] UserRegisterDto request)
+        public ActionResult<AuthDto> Register([FromBody] UserRegisterDto request)
         {
             try
             {
-                _authService.Register(request);
-                return Created();
+                var response = _authService.Register(request);
+                return Ok(response);
             }
             catch (Exception ex)
             {
