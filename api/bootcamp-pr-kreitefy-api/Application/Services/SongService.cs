@@ -21,9 +21,9 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             return _mapper.Map<List<SongDto>>(songs);
         }
 
-        public IEnumerable<RecentSongDto> GetRecentSongs(int count = 5)
+        public IEnumerable<RecentSongDto> GetRecentSongs(int count = 5, long? styleId = null)
         {
-            var songs = _songRepository.GetRecentSongs(count);
+            var songs = _songRepository.GetRecentSongs(count, styleId);
             return _mapper.Map<IEnumerable<RecentSongDto>>(songs);
         }
     }

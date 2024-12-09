@@ -32,11 +32,11 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 
         [HttpGet("/songs/recent-songs")]
         [Produces("application/json")]
-        public ActionResult<IEnumerable<RecentSongDto>> GetRecentSongs([FromQuery] int count = 5)
+        public ActionResult<IEnumerable<RecentSongDto>> GetRecentSongs([FromQuery] int count = 5, [FromQuery] long? styleId = null)
         {
             try
             {
-                var songs = _songService.GetRecentSongs(count);
+                var songs = _songService.GetRecentSongs(count, styleId);
                 return Ok(songs);
             }
             catch (Exception ex)
