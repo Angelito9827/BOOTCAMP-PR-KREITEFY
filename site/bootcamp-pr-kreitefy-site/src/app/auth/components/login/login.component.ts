@@ -28,7 +28,7 @@ export class LoginComponent {
         Validators.minLength(5),
         Validators.maxLength(100)
       ]],
-      password: ['', [Validators.required, CustomValidators.passwordValidator()]],
+      password: ['', [Validators.required]],
     },
   )
   }
