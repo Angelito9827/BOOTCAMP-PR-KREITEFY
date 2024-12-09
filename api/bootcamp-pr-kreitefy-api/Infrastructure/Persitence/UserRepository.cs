@@ -1,6 +1,5 @@
 ﻿using bootcamp_framework.Domain.Persistence;
 using bootcamp_framework.Infraestructure.Persistence;
-using bootcamp_pr_kreitefy_api.Application.Dtos;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
@@ -10,61 +9,39 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-        private ApplicationContext _applicationContext;
+        private readonly ApplicationContext _applicationContext;
+
         public UserRepository(ApplicationContext context) : base(context)
         {
             _applicationContext = context;
         }
 
-        public List<UserDto> GetAllUsers()
+        public List<User> GetAllUsers()
         {
             return _applicationContext.Users
-                .Select(u => new UserDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    LastName = u.LastName,
-                    Email = u.Email,
-                    Password = u.Password,
-                    RoleId = u.RoleId,
-                    RoleName = u.Role.Name
-                })
+                .Include(u => u.Role)
                 .ToList();
         }
 
         public override User GetById(long id)
         {
-            var user = _applicationContext.Users.Include(i => i.Role).SingleOrDefault(i => i.Id == id);
-
-            if (user == null)
-            {
-                throw new ElementNotFoundException();
-            }
+            var user = _applicationContext.Users.Include(u => u.Role).SingleOrDefault(u => u.Id == id);
+            if (user == null) throw new ElementNotFoundException();
             return user;
         }
 
         public User? GetUserByEmail(string email)
         {
             return _applicationContext.Users
-          .Where(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
-          .Select(u => new User
-          {
-              Id = u.Id,
-              Name = u.Name,
-              LastName = u.LastName,
-              Email = u.Email,
-              Password = u.Password,
-              RoleId = u.RoleId,
-          })
-          .FirstOrDefault();
-
+                .Include(u => u.Role)
+                .SingleOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
         }
 
         public override User Insert(User user)
         {
             _applicationContext.Users.Add(user);
             _applicationContext.SaveChanges();
-            _applicationContext.Entry(user).Reference(i => i.Role).Load();
+            _applicationContext.Entry(user).Reference(u => u.Role).Load();
             return user;
         }
 
@@ -72,7 +49,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
         {
             _applicationContext.Users.Update(user);
             _applicationContext.SaveChanges();
-            _applicationContext.Entry(user).Reference(i => i.Role).Load();
+            _applicationContext.Entry(user).Reference(u => u.Role).Load();
             return user;
         }
     }

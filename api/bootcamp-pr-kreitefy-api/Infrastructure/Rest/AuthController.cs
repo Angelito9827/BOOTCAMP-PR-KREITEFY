@@ -47,7 +47,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized(ex.Message);
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 ﻿using bootcamp_framework.Domain.Persistence;
 using bootcamp_framework.Infraestructure.Persistence;
-using bootcamp_pr_kreitefy_api.Application.Dtos;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
@@ -10,71 +9,50 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 {
     public class SongRepository : GenericRepository<Song>, ISongRepository
     {
-        ApplicationContext _applicationContext;
+        private readonly ApplicationContext _applicationContext;
+
         public SongRepository(ApplicationContext context) : base(context)
         {
             _applicationContext = context;
         }
 
-        public List<SongDto> GetAllSongs()
+        public List<Song> GetAllSongs()
         {
             return _applicationContext.Songs
-                .Select(i => new SongDto
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    AlbumId = i.AlbumId,
-                    AlbumName = i.Album.Name,
-                    AlbumImage = Convert.ToBase64String(i.Album.Image),
-                    ArtistId = i.ArtistId,
-                    ArtistName = i.Artist.Name,
-                    StyleId = i.StyleId,
-                    StyleName = i.Style.Name,
-                    Duration = (i.Duration),
-                    TotalPlayCount = i.TotalPlayCount,
-                    AverageScore = i.AverageScore,
-                    CreatedAt = i.CreatedAt
-                })
+                .Include(s => s.Album)
+                .Include(s => s.Artist)
+                .Include(s => s.Style)
                 .ToList();
         }
 
         public override Song GetById(long id)
         {
             var song = _applicationContext.Songs
-                .Include(i => i.Album)
-                .Include(i => i.Artist)
-                .Include(i => i.Style)
-                .SingleOrDefault(i => i.Id == id);
-            if (song == null)
-            {
-                throw new ElementNotFoundException();
-            }
-
+                .Include(s => s.Album)
+                .Include(s => s.Artist)
+                .Include(s => s.Style)
+                .SingleOrDefault(s => s.Id == id);
+            if (song == null) throw new ElementNotFoundException();
             return song;
         }
 
-        public IEnumerable<RecentSongDto> GetRecentSongs(int count = 5)
+        public IEnumerable<Song> GetRecentSongs(int count = 5)
         {
-            var songs = _applicationContext.Songs
-                .OrderByDescending(song => song.CreatedAt)
+            return _applicationContext.Songs
+                .Include(s => s.Artist)
+                .Include(s => s.Album)
+                .OrderByDescending(s => s.CreatedAt)
                 .Take(count)
-                .Select(i => new RecentSongDto()
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    ArtistName = i.Artist.Name,
-                    AlbumImage = Convert.ToBase64String(i.Album.Image),
-                });
-            return songs;
+                .ToList();
         }
 
         public override Song Insert(Song song)
         {
             _applicationContext.Songs.Add(song);
             _applicationContext.SaveChanges();
-            _applicationContext.Entry(song).Reference(i => i.Style).Load();
-            _applicationContext.Entry(song).Reference(i => i.Album).Load();
-            _applicationContext.Entry(song).Reference(i => i.Artist).Load();
+            _applicationContext.Entry(song).Reference(s => s.Album).Load();
+            _applicationContext.Entry(song).Reference(s => s.Artist).Load();
+            _applicationContext.Entry(song).Reference(s => s.Style).Load();
             return song;
         }
 
@@ -82,9 +60,9 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
         {
             _applicationContext.Songs.Update(song);
             _applicationContext.SaveChanges();
-            _applicationContext.Entry(song).Reference(i => i.Style).Load();
-            _applicationContext.Entry(song).Reference(i => i.Album).Load();
-            _applicationContext.Entry(song).Reference(i => i.Artist).Load();
+            _applicationContext.Entry(song).Reference(s => s.Album).Load();
+            _applicationContext.Entry(song).Reference(s => s.Artist).Load();
+            _applicationContext.Entry(song).Reference(s => s.Style).Load();
             return song;
         }
     }
