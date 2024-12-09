@@ -14,40 +14,14 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             _applicationContext = context;
         }
 
-        public void IncrementPlayCount(long userId, long songId)
+        public IEnumerable<History> GetAllByUserId(long userId)
         {
+            return _applicationContext.Histories.Where(h => h.UserId == userId).ToList();
+        }
 
-            var userExists = _applicationContext.Users.Any(u => u.Id == userId);
-            if (!userExists)
-                throw new KeyNotFoundException($"User with ID {userId} not found.");
-
-            var history = _applicationContext.Histories
-                .FirstOrDefault(h => h.UserId == userId && h.SongId == songId);
-
-            if (history == null)
-            {
-                history = new History
-                {
-                    UserId = userId,
-                    SongId = songId,
-                    MyPlayCount = 1,
-                    PlayedAt = DateTime.UtcNow
-                };
-                _applicationContext.Histories.Add(history);
-            }
-            else
-            {
-                history.MyPlayCount++;
-                history.PlayedAt = DateTime.UtcNow;
-            }
-
-            var song = _applicationContext.Songs.FirstOrDefault(s => s.Id == songId);
-            if (song == null)
-                throw new KeyNotFoundException($"Song with ID {songId} not found.");
-
-            song.TotalPlayCount++;
-
-            _applicationContext.SaveChanges();
+        public History? GetByUserAndSong(long userId, long songId)
+        {
+            return _applicationContext.Histories.FirstOrDefault(h => h.UserId == userId && h.SongId == songId);
         }
     }
 }

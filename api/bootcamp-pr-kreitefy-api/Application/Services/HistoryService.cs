@@ -1,30 +1,65 @@
 ﻿using AutoMapper;
 using bootcamp_framework.Application.Services;
 using bootcamp_pr_kreitefy_api.Application.Dtos;
+using bootcamp_pr_kreitefy_api.Application.Services;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 
-namespace bootcamp_pr_kreitefy_api.Application.Services
+public class HistoryService : GenericService<History, HistoryDto>, IHistoryService
 {
-    public class HistoryService : GenericService<History, HistoryDto>, IHistoryService
+    private readonly IUserRepository _userRepository;
+    private readonly ISongRepository _songRepository;
+    private readonly IHistoryRepository _historyRepository;
+
+    public HistoryService(
+        IUserRepository userRepository,
+        ISongRepository songRepository,
+        IHistoryRepository historyRepository,
+        IMapper mapper) : base(historyRepository, mapper)
     {
-        private readonly IHistoryRepository _historyRepository;
-        public HistoryService(IHistoryRepository historyRepository, IMapper mapper) : base(historyRepository, mapper)
+        _userRepository = userRepository;
+        _songRepository = songRepository;
+        _historyRepository = historyRepository;
+    }
+
+    public HistoryDto IncrementPlayCount(long userId, long songId)
+    {
+
+        var user = _userRepository.GetById(userId);
+        if (user == null)
         {
-            _historyRepository = historyRepository;
+            throw new KeyNotFoundException($"User with ID {userId} not found.");
         }
 
-        public HistoryDto IncrementPlayCount(long userId, long songId)
+        var song = _songRepository.GetById(songId);
+        if (song == null)
         {
-            _historyRepository.IncrementPlayCount(userId, songId);
-
-            var updatedHistory = _historyRepository.GetAll()
-               .FirstOrDefault(h => h.UserId == userId && h.SongId == songId);
-
-            if (updatedHistory == null)
-                throw new Exception("Failed to retrieve updated history.");
-
-            return _mapper.Map<HistoryDto>(updatedHistory);
+            throw new KeyNotFoundException($"Song with ID {songId} not found.");
         }
+
+        var history = _historyRepository.GetAll()
+            .FirstOrDefault(h => h.UserId == userId && h.SongId == songId);
+
+        if (history == null)
+        {
+            history = new History
+            {
+                UserId = userId,
+                SongId = songId,
+                MyPlayCount = 1,
+                PlayedAt = DateTime.UtcNow
+            };
+            _historyRepository.Insert(history);
+        }
+        else
+        {
+            history.MyPlayCount++;
+            history.PlayedAt = DateTime.UtcNow;
+        }
+
+        song.TotalPlayCount++;
+        _songRepository.Update(song);
+
+        return _mapper.Map<HistoryDto>(history);
     }
 }

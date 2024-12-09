@@ -7,10 +7,25 @@
           <h3 [routerLink]="['']">Kreitefy</h3>
         </div>
         <div class="auth">
-          <span *ngIf="isLoggedIn" class="user-name me-3">Welcome, {{ userName }}</span>
-          <button type="button" class="btn" (click)="handleLoginLogout()">
-            {{ isLoggedIn ? 'Logout' : 'Login' }}
-          </button>
+          <div *ngIf="isLoggedIn; else loginButton" class="dropdown">
+            <button
+              class="btn dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {{ userName }}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li><a class="dropdown-item" href="#">Perfil</a></li>
+              <li><button class="dropdown-item" (click)="logout()">Logout</button></li>
+            </ul>
+          </div>
+          <ng-template #loginButton>
+            <button type="button" class="btn" (click)="handleLoginLogout()">Login</button>
+          </ng-template>
         </div>
       </div>
   </nav>
+  

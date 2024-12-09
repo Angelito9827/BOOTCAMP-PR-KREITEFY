@@ -21,7 +21,13 @@ export class AuthService {
 
   register(userData: UserRegister){
     const endpoint = 'http://localhost:5272/auth/register';
-    return this.http.post(endpoint, userData);
+    return this.http.post(endpoint, userData).pipe(
+      tap((res: any) => {
+        if (res.token) {
+          this.saveToken(res.token);
+        }
+      })
+    );
   }
 
   login(credentials: any): Observable<any> {
@@ -84,7 +90,7 @@ export class AuthService {
     }
   }
 
-  private hasToken(): boolean {
+  hasToken(): boolean {
     return this.isBrowser() && !!localStorage.getItem(this.tokenKey);
   }
 
@@ -94,6 +100,10 @@ export class AuthService {
 
   getStoredUserId(): string {
     return this.isBrowser() ? localStorage.getItem(this.userId) || '' : '';
+  }
+
+  getStoredToken(): string | null {
+    return this.isBrowser() ? localStorage.getItem(this.tokenKey) : null;
   }
 
   private isBrowser(): boolean {

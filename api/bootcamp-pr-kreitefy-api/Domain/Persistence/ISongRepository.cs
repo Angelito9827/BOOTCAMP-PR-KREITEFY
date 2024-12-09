@@ -1,12 +1,11 @@
 ﻿using bootcamp_framework.Domain.Persistence;
-using bootcamp_pr_kreitefy_api.Application.Dtos;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 
 namespace bootcamp_pr_kreitefy_api.Domain.Persistence
 {
     public interface ISongRepository : IGenericRepository<Song>
     {
-        List<SongDto> GetAllSongs();
-        IEnumerable<RecentSongDto> GetRecentSongs(int count = 5);
+        List<Song> GetAllSongs();
+        IEnumerable<Song> GetRecentSongs(int count = 5);
     }
 }

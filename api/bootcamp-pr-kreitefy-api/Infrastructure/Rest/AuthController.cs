@@ -7,6 +7,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 {
     [Route("/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -20,12 +21,13 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 
         [HttpPost("register")]
         [Produces("application/json")]
-        public ActionResult Register([FromBody] UserRegisterDto request)
+        [AllowAnonymous]
+        public ActionResult<AuthDto> Register([FromBody] UserRegisterDto request)
         {
             try
             {
-                _authService.Register(request);
-                return Created();
+                var response = _authService.Register(request);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -45,7 +47,11 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

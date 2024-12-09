@@ -1,67 +1,70 @@
 ﻿using AutoMapper;
 using bootcamp_framework.Application.Services;
 using bootcamp_pr_kreitefy_api.Application.Dtos;
+using bootcamp_pr_kreitefy_api.Application.Services;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 
-namespace bootcamp_pr_kreitefy_api.Application.Services
+public class ScoreService : GenericService<Score, ScoreDto>, IScoreService
 {
-    public class ScoreService : GenericService<Score, ScoreDto>, IScoreService
+    private readonly IScoreRepository _scoreRepository;
+    private readonly ISongRepository _songRepository;
+
+    public ScoreService(IScoreRepository scoreRepository, IMapper mapper, ISongRepository songRepository)
+        : base(scoreRepository, mapper)
     {
-        private readonly IScoreRepository _scoreRepository;
-        private readonly ISongRepository _songRepository;
-        public ScoreService(IScoreRepository scoreRepository, IMapper mapper, ISongRepository songRepository) : base(scoreRepository, mapper)
+        _scoreRepository = scoreRepository;
+        _songRepository = songRepository;
+    }
+
+    public ScoreDto AddScore(long userId, long songId, int stars)
+    {
+        if (UserHasAlreadyRated(userId, songId))
         {
-            _scoreRepository = scoreRepository;
-            _songRepository = songRepository;
+            throw new InvalidOperationException("El usuario ya ha puntuado esta canción.");
         }
 
-        public ScoreDto AddScore(long userId, long songId, int stars)
+        var score = new Score
         {
-            var existingScore = _scoreRepository.GetByUserAndSong(userId, songId);
-            if (existingScore != null)
-            {
-                throw new InvalidOperationException("El usuario ya ha puntuado esta canción.");
-            }
+            UserId = userId,
+            SongId = songId,
+            Stars = stars
+        };
 
-            var score = new Score
-            {
-                UserId = userId,
-                SongId = songId,
-                Stars = stars
-            };
+        _scoreRepository.Add(score);
 
-            _scoreRepository.Add(score);
-            UpdateSongAverageScore(songId, stars);
+        UpdateSongAverageScore(songId);
 
-            return new ScoreDto
-            {
-                UserId = userId,
-                SongId = songId,
-                Stars = stars
-            };
+        return _mapper.Map<ScoreDto>(score);
+    }
+
+    private bool UserHasAlreadyRated(long userId, long songId)
+    {
+        return _scoreRepository.GetByUserAndSong(userId, songId) != null;
+    }
+
+    public void UpdateSongAverageScore(long songId)
+    {
+        var scores = _scoreRepository.GetScoresBySong(songId);
+        if (!scores.Any())
+        {
+            return;
         }
 
-        public void UpdateSongAverageScore(long songId, int newScore)
+        var averageScore = CalculateAverageScore(scores);
+
+        var song = _songRepository.GetById(songId);
+        if (song == null)
         {
-            var scores = _scoreRepository.GetScoresBySong(songId);
-            if (scores.Count == 0)
-            {
-                return;
-            }
-
-            var totalStars = scores.Sum(s => s.Stars) + newScore;
-            var totalScores = scores.Count + 1;
-
-            var averageScore = Math.Round((double)totalStars / totalScores, 2);
-
-            var song = _songRepository.GetById(songId);
-
-            if (song != null)
-            {
-                song.AverageScore = averageScore;
-                _songRepository.Update(song);
-            }
+            throw new KeyNotFoundException($"Song with ID {songId} not found.");
         }
+
+        song.AverageScore = averageScore;
+        _songRepository.Update(song);
+    }
+
+    private double CalculateAverageScore(IEnumerable<Score> scores)
+    {
+        return Math.Round(scores.Average(s => s.Stars), 2);
     }
 }

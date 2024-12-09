@@ -1,7 +1,10 @@
 .container-fluid {
-    display: flex;
-    justify-content: center;
-    padding: 80px;
+  display: flex;
+  justify-content: center;
+  padding: 130px;
+  background-color: rgb(48, 48, 48);
+  height: 100%;
+  min-height: 100vh;
 
     .card {
         display: flex;
@@ -10,97 +13,106 @@
         gap: 50px;
         padding: 50px;
         background-color: rgb(27, 27, 27);
-        width: 50%;
+        min-width: 50%;
         border-radius: 30px;
-    }
-    
-    .song-header {
+        overflow: hidden;
+        max-height: 60vh;
+
+        .song-header {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 50px;
 
-        .song-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+            .song-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
 
-            
-            .song-name {
+                .song-name {
                 text-align: center;
                 color: white;
                 background-color: rgb(48, 48, 48);
                 padding: 20px 40px;
-                border-radius: 100px;       
-            }
-            
-            .song-artist {
+                border-radius: 100px;
+                }
+
+                .song-artist {
                 text-align: center;
                 color: white;
                 font-weight: bold;
-                
-                .song-album {
-                    text-align: center;
-                    color: white;
-                }
-            }
 
-            .score {
+                    .song-album {
+                        text-align: center;
+                        color: white;
+                    }
+                }
+
+                .score {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 gap: 5px;
-        
-                .stars-buttons {
-        
-                    .star{
+
+                    .stars-buttons {
+                        .star {
                         color: white;
 
-                        &:hover {
-                            color: rgb(122, 122, 122);
+                            &:hover {
+                                color: rgb(122, 122, 122);
+                            }
                         }
                     }
-                }
-        
-                .average {
-                    color: white;
-                }
 
-                .play-count {
-                    color: white;
-                }
-            }
-        }
+                    .average {
+                        color: white;
+                    }
 
-    }
-    
-    .song-body {
-        display: flex;
-        flex-direction: column;
-        
-        .actions-buttons {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 20px;
-    
-            .reproduction {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                gap: 20px;
-                
-                .play {
-                    color: white;
-                    font-size: 50px;
-
-                    &:hover {
-                        color: rgb(122, 122, 122);
+                    .play-count {
+                        color: white;
                     }
                 }
             }
-    
         }
+
+        .song-body {
+
+            .actions-buttons {
+                
+                .reproduction {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 20px;
+
+                    .play {
+                            color: white;
+                            font-size: 50px;
+
+                            &:hover {
+                            color: rgb(122, 122, 122);
+                            }
+                        }
+                }
+            }
+        }
+
+        @media (max-width: 768px) {
+            .song-header {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+    @media (max-width: 768px) {
+        .card {
+            max-height: 100%;
+        }
+    }
+}
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 50px;
     }
 }
