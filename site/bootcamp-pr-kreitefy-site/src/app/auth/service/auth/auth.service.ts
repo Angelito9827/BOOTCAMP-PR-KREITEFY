@@ -21,7 +21,13 @@ export class AuthService {
 
   register(userData: UserRegister){
     const endpoint = 'http://localhost:5272/auth/register';
-    return this.http.post(endpoint, userData);
+    return this.http.post(endpoint, userData).pipe(
+      tap((res: any) => {
+        if (res.token) {
+          this.saveToken(res.token);
+        }
+      })
+    );
   }
 
   login(credentials: any): Observable<any> {
