@@ -3,5 +3,6 @@
 </div>
 
 <ng-template #loggedIn>
-        <app-recent-songs-card></app-recent-songs-card>
+    <app-filter (styleSelected)="onFilterChange($event)"></app-filter>
+    <app-recent-songs-card [styleId]="selectedStyleId"></app-recent-songs-card>
 </ng-template>

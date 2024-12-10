@@ -5,6 +5,7 @@ import { RecentSongDto } from '../model/recent-song.model';
 import { SongDetail } from '../model/song-detail.model';
 import { AuthService } from '../../auth/service/auth/auth.service';
 import { ScoreDto } from '../model/score.model';
+import { StyleDto } from '../model/style.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,11 @@ export class SongService {
   
   constructor(private http: HttpClient, private authService: AuthService  ) { }
 
-  public getRecentSongs(): Observable<RecentSongDto[]> {
+  public getRecentSongs(styleId?: number): Observable<RecentSongDto[]> {
     let urlEndpoint: string = "http://localhost:5272/songs/recent-songs";
+    if (styleId !== undefined) {
+      urlEndpoint += `?styleId=${styleId}`;
+    }
     return this.http.get<RecentSongDto[]>(urlEndpoint);
   }
 
@@ -33,5 +37,10 @@ export class SongService {
     const userId = this.authService.getStoredUserId();
     const urlEndpoint = `http://localhost:5272/score`;
     return this.http.post<SongDetail>(urlEndpoint, scoreDto);
-  }  
+  }
+
+  public getStyles(): Observable<StyleDto[]> {
+    let urlEndpoint:string = 'http://localhost:5272/styles';
+    return this.http.get<StyleDto[]>(urlEndpoint);
+  }
 }
