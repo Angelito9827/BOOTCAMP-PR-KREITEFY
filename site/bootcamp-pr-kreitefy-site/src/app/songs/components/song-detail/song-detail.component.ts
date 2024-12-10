@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SongDetail } from '../../model/song-detail.model';
 import { ActivatedRoute } from '@angular/router';
-import { SongService } from '../../services/song.service';
+import { SongService } from '../../service/song.service';
 import { ScoreDto } from '../../model/score.model';
 import { AuthService } from '../../../auth/service/auth/auth.service';
 

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecentSongDto } from '../../model/recent-song.model';
-import { SongService } from '../../services/song.service';
+import { SongService } from '../../service/song.service';
 
 @Component({
   selector: 'app-recent-songs-card',
@@ -14,6 +14,7 @@ import { SongService } from '../../services/song.service';
 export class RecentSongsCardComponent {
 
   recentSongs: RecentSongDto[] = [];
+  @Input() styleId?: number;
 
   constructor(
     private songService: SongService,
@@ -24,8 +25,12 @@ export class RecentSongsCardComponent {
     this.getRecentSongs();    
   }
 
+  ngOnChanges(): void {
+    this.getRecentSongs();
+  }
+
   private getRecentSongs(): void {
-    this.songService.getRecentSongs().subscribe({
+    this.songService.getRecentSongs(this.styleId).subscribe({
       next:(response: RecentSongDto[]) => {
         this.recentSongs = response},
         error:(err) => {

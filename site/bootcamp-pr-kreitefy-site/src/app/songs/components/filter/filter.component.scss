@@ -1,0 +1,38 @@
+div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    color: white;
+    background-color: rgb(48, 48, 48);
+
+        .btn {
+            color: white;
+            border-color: white;
+            margin: 30px;
+            background-color:  rgb(27, 27, 27);;
+
+            &:hover {
+                background-color: darkgray;
+            }
+
+        }
+        .dropdown-menu {
+            background-color: darkgray;
+            width: auto !important;  
+            min-width: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+            .dropdown-item{
+                cursor: pointer;
+                
+                &:hover {
+                    background-color: rgb(48, 48, 48);
+                    color: white;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+  

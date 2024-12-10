@@ -8,6 +8,7 @@ import { AuthService } from '../auth/service/auth/auth.service';
 })
 export class HomeComponent {
   isLoggedIn: boolean = false;
+  selectedStyleId?: number;
 
   constructor(private authService: AuthService) { }
 
@@ -15,5 +16,9 @@ export class HomeComponent {
     this.authService.getAuthStatus().subscribe(status => {
       this.isLoggedIn = status;
     });
+  }
+
+  onFilterChange(styleId: number | null): void {
+    this.selectedStyleId = styleId || undefined;
   }
 }
