@@ -15,7 +15,7 @@
     .songs {
         display: flex;
         justify-content: center;
-
+       
         .card {
             display: flex;
             flex-wrap: wrap;
@@ -23,8 +23,8 @@
             background-color: rgb(27, 27, 27);
             justify-content: center;
             width: 90%;
-            min-width: 30%;
             overflow: hidden;
+            min-width: 30%;
             
             .card-body {
                 display: flex;
@@ -55,6 +55,14 @@
                     justify-content: center;
                     font-weight: bold;
                     
+                }
+                .style {
+                    color: rgb(190, 57, 57);
+                    font-weight: bold;
+                }
+                .play-count {
+                    color: darkgray;
+                    font-weight: bold;
                 }
             }
         }

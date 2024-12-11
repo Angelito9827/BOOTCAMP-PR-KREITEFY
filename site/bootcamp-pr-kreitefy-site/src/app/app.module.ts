@@ -12,6 +12,7 @@ import { RegisterComponent } from './auth/components/register/register.component
 import { RecentSongsCardComponent } from './songs/components/recent-songs-card/recent-songs-card.component';
 import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 import { FilterComponent } from './songs/components/filter/filter.component';
+import { SongsForMeComponent } from './songs/components/songs-for-me/songs-for-me.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FilterComponent } from './songs/components/filter/filter.component';
     ReactiveFormsModule,
     HttpClientModule,
     RecentSongsCardComponent,
-    FilterComponent
+    FilterComponent,
+    SongsForMeComponent
   ],
   providers: [
     provideClientHydration(),
