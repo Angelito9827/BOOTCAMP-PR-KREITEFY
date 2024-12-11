@@ -1,4 +1,5 @@
-﻿using bootcamp_framework.Application.Services;
+﻿using bootcamp_framework.Application;
+using bootcamp_framework.Application.Services;
 using bootcamp_pr_kreitefy_api.Application.Dtos;
 
 namespace bootcamp_pr_kreitefy_api.Application.Services
@@ -7,5 +8,6 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
     {
         IEnumerable<RecommendedSongDto> GetRecommendedSongsForUser(long userId);
         HistoryDto IncrementPlayCount(long userId, long songId);
+        public PagedList<HistoryProfileDto> GetHistorySongs(long userId, PaginationParameters paginationParameters);
     }
 }

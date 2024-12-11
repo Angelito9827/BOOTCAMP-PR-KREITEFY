@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using bootcamp_framework.Application;
 using bootcamp_framework.Application.Services;
 using bootcamp_pr_kreitefy_api.Application.Dtos;
 using bootcamp_pr_kreitefy_api.Application.Services;
@@ -82,5 +83,18 @@ public class HistoryService : GenericService<History, HistoryDto>, IHistoryServi
         _songRepository.Update(song);
 
         return _mapper.Map<HistoryDto>(history);
+    }
+
+    public PagedList<HistoryProfileDto> GetHistorySongs(long userId, PaginationParameters paginationParameters)
+    {
+        var history = _historyRepository.GetHistorySongs(userId, paginationParameters);
+        var historyDtos = history.Select(h => _mapper.Map<HistoryProfileDto>(h)).ToList();
+        var pagedList = new PagedList<HistoryProfileDto>(
+       historyDtos,
+       history.TotalCount,
+       history.CurrentPage,
+       history.PageSize
+   );
+        return pagedList;
     }
 }

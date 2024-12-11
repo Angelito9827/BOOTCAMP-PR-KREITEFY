@@ -1,5 +1,6 @@
 ﻿using bootcamp_framework.Domain.Persistence;
 using bootcamp_framework.Infraestructure.Persistence;
+using bootcamp_pr_kreitefy_api.Application.Services;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
@@ -10,10 +11,12 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
         private readonly ApplicationContext _applicationContext;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public UserRepository(ApplicationContext context) : base(context)
+        public UserRepository(ApplicationContext context, IPasswordHasher passwordHasher) : base(context)
         {
             _applicationContext = context;
+            _passwordHasher = passwordHasher;
         }
 
         public List<User> GetAllUsers()
@@ -39,6 +42,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 
         public override User Insert(User user)
         {
+            user.Password = _passwordHasher.HashPassword(user.Password);
             _applicationContext.Users.Add(user);
             _applicationContext.SaveChanges();
             _applicationContext.Entry(user).Reference(u => u.Role).Load();
@@ -47,6 +51,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
 
         public override User Update(User user)
         {
+            user.Password = _passwordHasher.HashPassword(user.Password);
             _applicationContext.Users.Update(user);
             _applicationContext.SaveChanges();
             _applicationContext.Entry(user).Reference(u => u.Role).Load();

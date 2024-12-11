@@ -1,4 +1,5 @@
-﻿using bootcamp_framework.Infraestructure.Persistence;
+﻿using bootcamp_framework.Application;
+using bootcamp_framework.Infraestructure.Persistence;
 using bootcamp_pr_kreitefy_api.Domain.Entities;
 using bootcamp_pr_kreitefy_api.Domain.Persistence;
 using bootcamp_pr_kreitefy_api.Infrastructure.Persistence;
@@ -35,4 +36,15 @@ public class HistoryRepository : GenericRepository<History>, IHistoryRepository
             .Take(5)
             .ToList();
     }
+
+    public PagedList<History> GetHistorySongs(long userId, PaginationParameters paginationParameters)
+    {
+        var history = _applicationContext.Histories
+            .Include(h => h.Song)
+            .Where(h => h.UserId == userId)
+        .OrderByDescending(h => h.PlayedAt);
+
+        return PagedList<History>.ToPagedList(history, paginationParameters.PageNumber, paginationParameters.PageSize);
+    }
+
 }

@@ -10,6 +10,11 @@ namespace bootcamp_pr_kreitefy_api.Application.Mapping
         {
             CreateMap<History, HistoryDto>();
             CreateMap<HistoryDto, History>();
+
+            CreateMap<History, HistoryProfileDto>()
+                .ForMember(dest => dest.SongName, opt => opt.MapFrom(src => src.Song.Name))
+                .ForMember(dest => dest.SongId, opt => opt.MapFrom(src => src.Song.Id))
+                .ForMember(dest => dest.PlayedAtFormatted, opt => opt.MapFrom(src => src.PlayedAt));
         }
     }
 }
