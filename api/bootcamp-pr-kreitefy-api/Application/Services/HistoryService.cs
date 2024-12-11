@@ -12,14 +12,35 @@ public class HistoryService : GenericService<History, HistoryDto>, IHistoryServi
     private readonly IHistoryRepository _historyRepository;
 
     public HistoryService(
-        IUserRepository userRepository,
-        ISongRepository songRepository,
-        IHistoryRepository historyRepository,
-        IMapper mapper) : base(historyRepository, mapper)
+        IUserRepository userRepository, ISongRepository songRepository, IHistoryRepository historyRepository, IMapper mapper) : base(historyRepository, mapper)
     {
         _userRepository = userRepository;
         _songRepository = songRepository;
         _historyRepository = historyRepository;
+    }
+
+    public IEnumerable<RecommendedSongDto> GetRecommendedSongsForUser(long userId)
+    {
+
+        var histories = _historyRepository.GetAllByUserId(userId);
+
+        var topTwoStyles = histories
+            .Where(h => h.Song != null)
+            .GroupBy(h => h.Song.StyleId)
+            .Select(g => new
+            {
+                StyleId = g.Key,
+                TotalPlayCount = g.Sum(h => h.MyPlayCount)
+            })
+            .OrderByDescending(g => g.TotalPlayCount)
+            .Take(2)
+            .Select(g => g.StyleId)
+            .ToList();
+
+        var recommendedSongs = _historyRepository.GetRecommendedSongsByStyles(topTwoStyles);
+
+        return _mapper.Map<IEnumerable<RecommendedSongDto>>(recommendedSongs);
+
     }
 
     public HistoryDto IncrementPlayCount(long userId, long songId)

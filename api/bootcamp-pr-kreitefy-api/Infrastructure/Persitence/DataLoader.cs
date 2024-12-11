@@ -41,11 +41,6 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
                 LoadRoles();
             }
             _applicationContext.SaveChanges();
-            if (!_applicationContext.Users.Any())
-            {
-                LoadUsers();
-            }
-            _applicationContext.SaveChanges();
             if (!_applicationContext.Styles.Any())
             {
                 LoadStyles();
@@ -64,6 +59,11 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             if (!_applicationContext.Songs.Any())
             {
                 LoadSongs();
+            }
+            _applicationContext.SaveChanges();
+            if (!_applicationContext.Users.Any())
+            {
+                LoadUsers();
             }
             _applicationContext.SaveChanges();
         }
@@ -117,7 +117,35 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             _applicationContext.Users.AddRange(users);
             _applicationContext.SaveChanges();
 
-            Console.WriteLine("Users loaded:");
+            Random random = new Random();
+
+            var songs = _applicationContext.Songs.Select(s => s.Id).ToList();
+
+            foreach (User user in users)
+            {
+
+                int numberOfPlays = random.Next(10, 40);
+                var idSongs = songs.OrderBy(x => Guid.NewGuid()).Take(numberOfPlays).ToList();
+
+                foreach (var songId in idSongs)
+                {
+                    int totalStreams = new Random().Next(1, 100);
+
+                    var history = new History
+                    {
+                        UserId = user.Id,
+                        SongId = songId,
+                        PlayedAt = DateTime.UtcNow.AddDays(-new Random().Next(1, 30)),
+                        MyPlayCount = totalStreams
+                    };
+
+                    _applicationContext.Histories.Add(history);
+                }
+            }
+
+            _applicationContext.SaveChanges();
+
+            Console.WriteLine("Users and histories loaded:");
         }
 
         public void LoadStyles()
@@ -177,7 +205,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Artist { Name = "La Raíz" },
             new Artist { Name = "mago de oz" },
             new Artist { Name = "Saratoga" },
-            new Artist { Name = "Linkong park" },
+            new Artist { Name = "Linkin park" },
             new Artist { Name = "Slipknot" },
             new Artist { Name = "Avenged Sevenfold" },
             new Artist { Name = "SFDK" },

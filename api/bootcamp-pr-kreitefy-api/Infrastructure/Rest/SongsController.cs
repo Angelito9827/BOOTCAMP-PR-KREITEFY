@@ -32,6 +32,7 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 
         [HttpGet("/songs/recent-songs")]
         [Produces("application/json")]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<RecentSongDto>> GetRecentSongs([FromQuery] int count = 5, [FromQuery] long? styleId = null)
         {
             try

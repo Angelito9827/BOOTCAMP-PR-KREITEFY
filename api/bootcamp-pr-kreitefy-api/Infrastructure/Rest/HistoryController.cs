@@ -34,5 +34,27 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpGet("user/{userId}/recommendedsongs")]
+        [Produces("application/json")]
+        [AllowAnonymous]
+        public IActionResult GetRecommendeSongs([FromRoute] long userId)
+        {
+            try
+            {
+                var songsForMe = _historyService.GetRecommendedSongsForUser(userId);
+                if (songsForMe == null || !songsForMe.Any())
+                {
+                    return NotFound(new { Message = "No personalized songs found for this user." });
+                }
+
+                return Ok(songsForMe);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
     }
 }

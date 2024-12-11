@@ -1,6 +1,8 @@
-﻿namespace bootcamp_pr_kreitefy_api.Application.Dtos
+﻿using bootcamp_framework.Application.Dtos;
+
+namespace bootcamp_pr_kreitefy_api.Application.Dtos
 {
-    public class ArtistDto
+    public class ArtistDto : IDto
     {
         public long Id { get; set; }
 
