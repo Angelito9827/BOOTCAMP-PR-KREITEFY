@@ -39,7 +39,7 @@ export class RecentSongsCardComponent {
     }) 
   }
 
-  navigateToProductDetails(songId: number) {
+  navigateToSongDetails(songId: number) {
     this.router.navigate(["/songs/",songId])
   }
 }

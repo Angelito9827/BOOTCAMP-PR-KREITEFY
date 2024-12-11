@@ -6,6 +6,7 @@ import { SongDetail } from '../model/song-detail.model';
 import { AuthService } from '../../auth/service/auth/auth.service';
 import { ScoreDto } from '../model/score.model';
 import { StyleDto } from '../model/style.model';
+import { RecommendedSongDto } from '../model/recommended-song.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,10 @@ export class SongService {
   public getStyles(): Observable<StyleDto[]> {
     let urlEndpoint:string = 'http://localhost:5272/styles';
     return this.http.get<StyleDto[]>(urlEndpoint);
+  }
+
+  public getRecommendedSongs(userId: string): Observable<RecommendedSongDto[]> {
+    let urlEndpoint:string = `http://localhost:5272/history/user/${userId}/recommendedsongs`;
+    return this.http.get<RecommendedSongDto[]>(urlEndpoint);
   }
 }

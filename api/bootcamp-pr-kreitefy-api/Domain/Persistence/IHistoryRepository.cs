@@ -7,5 +7,7 @@ namespace bootcamp_pr_kreitefy_api.Domain.Persistence
     {
         IEnumerable<History> GetAllByUserId(long userId);
         History? GetByUserAndSong(long userId, long songId);
+        IEnumerable<Song> GetRecommendedSongsByStyles(List<long> topTwoStyles);
+
     }
 }

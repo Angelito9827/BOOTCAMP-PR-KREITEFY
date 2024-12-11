@@ -1,6 +1,8 @@
-﻿namespace bootcamp_pr_kreitefy_api.Application.Dtos
+﻿using bootcamp_framework.Application.Dtos;
+
+namespace bootcamp_pr_kreitefy_api.Application.Dtos
 {
-    public class ScoreDto
+    public class ScoreDto : IDto
     {
         public long Id { get; set; }
 
