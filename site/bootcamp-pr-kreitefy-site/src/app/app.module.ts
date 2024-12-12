@@ -13,6 +13,7 @@ import { RecentSongsCardComponent } from './songs/components/recent-songs-card/r
 import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 import { FilterComponent } from './songs/components/filter/filter.component';
 import { SongsForMeComponent } from './songs/components/songs-for-me/songs-for-me.component';
+import { ProfileComponent } from './auth/components/profile/profile.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SongsForMeComponent } from './songs/components/songs-for-me/songs-for-m
     HomeComponent,
     NavbarComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

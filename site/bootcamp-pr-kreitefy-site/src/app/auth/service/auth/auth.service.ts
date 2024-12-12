@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
 import { UserRegister } from '../../model/user-register.model';
+import { UserDto } from '../../model/user.model';
+import { HistoryProfileDto, PaginatedResponse } from '../../model/history-profile.model';
 
 @Injectable({
   providedIn: 'root',
@@ -108,5 +110,20 @@ export class AuthService {
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined';
+  }
+
+  public getUserById(userId: string): Observable<UserDto> {
+    let urlEndpoint:string = `http://localhost:5272/users/${userId}`;
+    return this.http.get<UserDto>(urlEndpoint);
+  }
+
+  public putUserById(userData: UserDto): Observable<UserDto> {
+    let urlEndpoint:string = 'http://localhost:5272/users';
+    return this.http.put<UserDto>(urlEndpoint, userData);
+  }
+
+  public getHistory(userId: string, page: number, size: number): Observable<PaginatedResponse<HistoryProfileDto>> {
+    let urlEndpoint:string = `http://localhost:5272/history/user/${userId}?PageNumber=${page}&PageSize=${size}`;
+    return this.http.get<PaginatedResponse<HistoryProfileDto>>(urlEndpoint);
   }
 }
