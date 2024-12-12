@@ -1,4 +1,5 @@
-﻿using bootcamp_pr_kreitefy_api.Application.Services;
+﻿using bootcamp_framework.Application;
+using bootcamp_pr_kreitefy_api.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,5 +57,34 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
             }
         }
 
+        [HttpGet("user/{userId}")]
+        [Produces("application/json")]
+        [AllowAnonymous]
+        public IActionResult GetHistory([FromRoute] long userId, [FromQuery] PaginationParameters paginationParameters)
+        {
+            try
+            {
+                var history = _historyService.GetHistorySongs(userId, paginationParameters);
+                if (history == null || !history.Any())
+                {
+                    return NotFound(new { Message = "No history found for this user." });
+                }
+
+                var response = new
+                {
+                    CurrentPage = history.CurrentPage,
+                    TotalPages = history.TotalPage,
+                    PageSize = history.PageSize,
+                    TotalCount = history.TotalCount,
+                    Items = history
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
     }
 }

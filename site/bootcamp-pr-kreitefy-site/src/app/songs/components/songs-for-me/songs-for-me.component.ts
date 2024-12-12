@@ -36,7 +36,7 @@ private getSongsForMe(): void {
     next:(response: RecommendedSongDto[]) => {
       this.songs = response},
       error:(err) => {
-        console.error("Error getting recent songs")
+        console.error("Error getting recommended songs")
       }
   }) 
 }

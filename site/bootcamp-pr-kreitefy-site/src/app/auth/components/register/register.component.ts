@@ -48,7 +48,7 @@ export class RegisterComponent {
         lastName : this.form.controls?.['lastName'].value,
         name : this.form.controls?.['name'].value,
         password : this.form.controls?.['password'].value,
-        roleId : 2
+        roleId: 2
       }
 
       this.authService.register(request).subscribe({
