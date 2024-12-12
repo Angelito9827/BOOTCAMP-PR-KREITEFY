@@ -14,6 +14,7 @@ import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 import { FilterComponent } from './songs/components/filter/filter.component';
 import { SongsForMeComponent } from './songs/components/songs-for-me/songs-for-me.component';
 import { ProfileComponent } from './auth/components/profile/profile.component';
+import { MostPlayedSongsComponent } from './songs/components/most-played-songs/most-played-songs.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { ProfileComponent } from './auth/components/profile/profile.component';
     HttpClientModule,
     RecentSongsCardComponent,
     FilterComponent,
-    SongsForMeComponent
+    SongsForMeComponent,
+    MostPlayedSongsComponent
   ],
   providers: [
     provideClientHydration(),
