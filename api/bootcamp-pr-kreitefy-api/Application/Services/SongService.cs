@@ -26,5 +26,11 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
             var songs = _songRepository.GetRecentSongs(count, styleId);
             return _mapper.Map<IEnumerable<RecentSongDto>>(songs);
         }
+
+        public IEnumerable<MostPlayedSongsDto> GetMostPlayedSongs(int count = 5, long? styleId = null)
+        {
+            var songs = _songRepository.GetMostPlayedSongs(count, styleId);
+            return _mapper.Map<IEnumerable<MostPlayedSongsDto>>(songs);
+        }
     }
 }

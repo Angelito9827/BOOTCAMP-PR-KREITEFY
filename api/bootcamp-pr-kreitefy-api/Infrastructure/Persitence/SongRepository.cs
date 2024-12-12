@@ -66,5 +66,16 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             _applicationContext.Entry(song).Reference(s => s.Style).Load();
             return song;
         }
+
+        public IEnumerable<Song> GetMostPlayedSongs(int count = 5, long? styleId = null)
+        {
+            return _applicationContext.Songs
+                .Include(s => s.Artist)
+                .Include(s => s.Album)
+                .Where(song => !styleId.HasValue || song.StyleId == styleId)
+                .OrderByDescending(s => s.TotalPlayCount)
+                .Take(count)
+                .ToList();
+        }
     }
 }

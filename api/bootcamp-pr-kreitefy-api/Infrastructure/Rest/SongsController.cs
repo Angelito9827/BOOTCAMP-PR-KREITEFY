@@ -44,5 +44,21 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("/songs/most-played-songs")]
+        [Produces("application/json")]
+        [AllowAnonymous]
+        public ActionResult<IEnumerable<MostPlayedSongsDto>> GetMostPlayedSongs([FromQuery] int count = 5, [FromQuery] long? styleId = null)
+        {
+            try
+            {
+                var songs = _songService.GetMostPlayedSongs(count, styleId);
+                return Ok(songs);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

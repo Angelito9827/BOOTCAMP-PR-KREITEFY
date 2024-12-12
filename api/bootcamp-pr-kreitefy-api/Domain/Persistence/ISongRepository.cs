@@ -7,5 +7,6 @@ namespace bootcamp_pr_kreitefy_api.Domain.Persistence
     {
         List<Song> GetAllSongs();
         IEnumerable<Song> GetRecentSongs(int count = 5, long? styleId = null);
+        IEnumerable<Song> GetMostPlayedSongs(int count = 5, long? styleId = null);
     }
 }
