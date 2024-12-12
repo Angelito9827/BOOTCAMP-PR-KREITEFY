@@ -75,10 +75,9 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Role { Name = "Admin" },
             new Role { Name = "User" }
             };
-            foreach (Role role in roles)
-            {
-                _applicationContext.Roles.Add(role);
-            }
+            _applicationContext.Roles.AddRange(roles);
+            _applicationContext.SaveChanges();
+            Console.WriteLine("Roles loaded.");
         }
 
         public void LoadUsers()
@@ -109,40 +108,37 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
         }
             };
 
-            foreach (User user in users)
-            {
-                _applicationContext.Users.Add(user);
-            }
-
             _applicationContext.Users.AddRange(users);
+
             _applicationContext.SaveChanges();
 
             Random random = new Random();
 
-            var songs = _applicationContext.Songs.Select(s => s.Id).ToList();
+            var songIds = _applicationContext.Songs.Select(s => s.Id).ToList();
 
-            foreach (User user in users)
+            var histories = new List<History>();
+            foreach (var user in users)
             {
-
                 int numberOfPlays = random.Next(10, 40);
-                var idSongs = songs.OrderBy(x => Guid.NewGuid()).Take(numberOfPlays).ToList();
+                var selectedSongIds = songIds.OrderBy(x => Guid.NewGuid()).Take(numberOfPlays).ToList();
 
-                foreach (var songId in idSongs)
+                foreach (var songId in selectedSongIds)
                 {
-                    int totalStreams = new Random().Next(1, 100);
+                    int totalPlayCounts = random.Next(1, 50);
 
                     var history = new History
                     {
                         UserId = user.Id,
                         SongId = songId,
-                        PlayedAt = DateTime.UtcNow.AddDays(-new Random().Next(1, 30)),
-                        MyPlayCount = totalStreams
+                        PlayedAt = DateTime.UtcNow.AddDays(-random.Next(1, 40)),
+                        MyPlayCount = totalPlayCounts
                     };
 
-                    _applicationContext.Histories.Add(history);
+                    histories.Add(history);
                 }
             }
 
+            _applicationContext.Histories.AddRange(histories);
             _applicationContext.SaveChanges();
 
             Console.WriteLine("Users and histories loaded:");
@@ -157,10 +153,9 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Style { Name = "Rap" },
             new Style { Name = "Indie" }
             };
-            foreach (Style style in styles)
-            {
-                _applicationContext.Styles.Add(style);
-            }
+            _applicationContext.Styles.AddRange(styles);
+            _applicationContext.SaveChanges();
+            Console.WriteLine("Styles loaded.");
         }
 
         public void LoadAlbums()
@@ -188,15 +183,14 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Album { Name = "Copacabana", Image = copacabana },
             new Album { Name = "Animales", Image = animales },
             };
-            foreach (Album album in albums)
-            {
-                _applicationContext.Albums.Add(album);
-            }
+            _applicationContext.Albums.AddRange(albums);
+            _applicationContext.SaveChanges();
+            Console.WriteLine("Albums loaded.");
         }
 
         public void LoadArtist()
         {
-            var artits = new Artist[]
+            var artists = new Artist[]
             {
             new Artist { Name = "Gun´s N Roses" },
             new Artist { Name = "Marea" },
@@ -219,10 +213,9 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
             new Artist { Name = "Izal" },
             new Artist { Name = "Pereza" },
             };
-            foreach (Artist artist in artits)
-            {
-                _applicationContext.Artists.Add(artist);
-            }
+            _applicationContext.Artists.AddRange(artists);
+            _applicationContext.SaveChanges();
+            Console.WriteLine("Artists loaded.");
         }
 
         public void LoadSongs()
@@ -459,10 +452,9 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Persitence
                  CreatedAt = DateTime.UtcNow
             }
             };
-            foreach (Song song in songs)
-            {
-                _applicationContext.Songs.Add(song);
-            }
+            _applicationContext.Songs.AddRange(songs);
+            _applicationContext.SaveChanges();
+            Console.WriteLine("Songs loaded.");
         }
     }
 }

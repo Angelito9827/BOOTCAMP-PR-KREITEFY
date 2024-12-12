@@ -23,24 +23,8 @@ public class HistoryService : GenericService<History, HistoryDto>, IHistoryServi
     public IEnumerable<RecommendedSongDto> GetRecommendedSongsForUser(long userId)
     {
 
-        var histories = _historyRepository.GetAllByUserId(userId);
+        return _historyRepository.GetRecommendedSongs(userId);
 
-        var topTwoStyles = histories
-            .Where(h => h.Song != null)
-            .GroupBy(h => h.Song.StyleId)
-            .Select(g => new
-            {
-                StyleId = g.Key,
-                TotalPlayCount = g.Sum(h => h.MyPlayCount)
-            })
-            .OrderByDescending(g => g.TotalPlayCount)
-            .Take(2)
-            .Select(g => g.StyleId)
-            .ToList();
-
-        var recommendedSongs = _historyRepository.GetRecommendedSongsByStyles(topTwoStyles);
-
-        return _mapper.Map<IEnumerable<RecommendedSongDto>>(recommendedSongs);
 
     }
 
@@ -77,6 +61,7 @@ public class HistoryService : GenericService<History, HistoryDto>, IHistoryServi
         {
             history.MyPlayCount++;
             history.PlayedAt = DateTime.UtcNow;
+            _historyRepository.Update(history);
         }
 
         song.TotalPlayCount++;
