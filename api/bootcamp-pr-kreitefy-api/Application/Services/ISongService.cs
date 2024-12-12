@@ -7,5 +7,6 @@ namespace bootcamp_pr_kreitefy_api.Application.Services
     {
         List<SongDto> GetAllSongs();
         IEnumerable<RecentSongDto> GetRecentSongs(int count = 5, long? styleId = null);
+        IEnumerable<MostPlayedSongsDto> GetMostPlayedSongs(int count = 5, long? styleId = null);
     }
 }

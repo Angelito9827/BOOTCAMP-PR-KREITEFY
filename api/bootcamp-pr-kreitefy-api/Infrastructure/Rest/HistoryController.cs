@@ -38,7 +38,6 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 
         [HttpGet("user/{userId}/recommendedsongs")]
         [Produces("application/json")]
-        [AllowAnonymous]
         public IActionResult GetRecommendeSongs([FromRoute] long userId)
         {
             try
@@ -59,7 +58,6 @@ namespace bootcamp_pr_kreitefy_api.Infrastructure.Rest
 
         [HttpGet("user/{userId}")]
         [Produces("application/json")]
-        [AllowAnonymous]
         public IActionResult GetHistory([FromRoute] long userId, [FromQuery] PaginationParameters paginationParameters)
         {
             try

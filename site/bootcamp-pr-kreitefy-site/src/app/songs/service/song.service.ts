@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/service/auth/auth.service';
 import { ScoreDto } from '../model/score.model';
 import { StyleDto } from '../model/style.model';
 import { RecommendedSongDto } from '../model/recommended-song.model';
+import { MostPlayedSongDto } from '../model/most-played-songs.model';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,13 @@ export class SongService {
   public getRecommendedSongs(userId: string): Observable<RecommendedSongDto[]> {
     let urlEndpoint:string = `http://localhost:5272/history/user/${userId}/recommendedsongs`;
     return this.http.get<RecommendedSongDto[]>(urlEndpoint);
+  }
+
+  public getMostPlayedSongs(styleId?: number): Observable<MostPlayedSongDto[]> {
+    let urlEndpoint: string = "http://localhost:5272/songs/most-played-songs";
+    if (styleId !== undefined) {
+      urlEndpoint += `?styleId=${styleId}`;
+    }
+    return this.http.get<MostPlayedSongDto[]>(urlEndpoint);
   }
 }
